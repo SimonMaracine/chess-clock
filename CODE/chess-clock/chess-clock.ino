@@ -68,9 +68,12 @@ byte RIGHT_PIPE[] = {
 
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
-unsigned long left_player_time = 0;  // In seconds
+// In deciseconds; these shouldn't go past 59400
+unsigned long left_player_time = 0;
 unsigned long right_player_time = 0;
-unsigned long last_time = 0;  // In milliseconds
+
+// In milliseconds
+unsigned long last_time = 0;
 
 Player player = Player::Left;
 
@@ -78,20 +81,24 @@ Buttons buttons;
 
 void display_time(int x, int y, unsigned long player_time)
 {
-  char ascii_zero = '0';
-  char output[7];
+  const char ASCII_ZERO = '0';
+  char output[8];  // Includes the null termination character
 
-  unsigned long minutes = player_time / 60;
-  unsigned long seconds = player_time % 60;
+  const unsigned long player_time_seconds = player_time / 10.0f;
+  
+  const unsigned long minutes = player_time_seconds / 60;
+  const unsigned long seconds = player_time_seconds % 60;
+  const unsigned long deciseconds = player_time % 10;
 
-  output[0] = ascii_zero + minutes / 100;
-  output[1] = ascii_zero + (minutes / 10) % 10;
-  output[2] = ascii_zero + minutes % 10;
-  output[3] = ':';
-  output[4] = ascii_zero + seconds / 10;
-  output[5] = ascii_zero + seconds % 10;
+  output[0] = ASCII_ZERO + minutes / 10;
+  output[1] = ASCII_ZERO + minutes % 10;
+  output[2] = ':';
+  output[3] = ASCII_ZERO + seconds / 10;
+  output[4] = ASCII_ZERO + seconds % 10;
+  output[5] = '.';
+  output[6] = ASCII_ZERO + deciseconds;
 
-  output[6] = 0;
+  output[7] = 0;
 
   lcd.setCursor(x, y);
   lcd.print(output);
@@ -149,7 +156,7 @@ void loop()
     player = Player::Left;
   }
 
-  if (millis() - last_time > 1000)
+  if (millis() - last_time > 100)
   {
     if (player == Player::Left)
       left_player_time++;
