@@ -44,6 +44,28 @@ byte FILLED_RECTANGLE[] = {
   B00000
 };
 
+byte LEFT_PIPE[] = {
+  B10000,
+  B10000,
+  B10000,
+  B10000,
+  B10000,
+  B10000,
+  B10000,
+  B10000
+};
+
+byte RIGHT_PIPE[] = {
+  B00001,
+  B00001,
+  B00001,
+  B00001,
+  B00001,
+  B00001,
+  B00001,
+  B00001
+};
+
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
 unsigned long left_player_time = 0;  // In seconds
@@ -88,17 +110,27 @@ void setup()
   lcd.begin(16, 2);
   lcd.createChar(0, EMPTY_RECTANGLE);
   lcd.createChar(1, FILLED_RECTANGLE);
+  lcd.createChar(2, LEFT_PIPE);
+  lcd.createChar(3, RIGHT_PIPE);
 
+  // Left player indicator
   lcd.setCursor(3, 0);
-  lcd.write((uint8_t) 0);
+  lcd.write((byte) 0);
 
+  // Right player indicator
   lcd.setCursor(13, 0);
-  lcd.write((uint8_t) 1);
+  lcd.write((byte) 1);
 
+  // Middle seperator
   lcd.setCursor(7, 0);
-  lcd.print("||");
+  lcd.write((byte) 3);
   lcd.setCursor(7, 1);
-  lcd.print("||");
+  lcd.write((byte) 3);
+  
+  lcd.setCursor(8, 0);
+  lcd.write((byte) 2);
+  lcd.setCursor(8, 1);
+  lcd.write((byte) 2);
 }
 
 void loop()
@@ -129,9 +161,6 @@ void loop()
 
   display_time(0, 1, left_player_time);
   display_time(10, 1, right_player_time);
-
-//  lcd.setCursor(0, 0);
-//  lcd.print(millis() / 1000);
 
   delay(5);
 }
