@@ -22,6 +22,28 @@ enum class Player
   Left, Right
 };
 
+byte EMPTY_RECTANGLE[] = {
+  B00000,
+  B11111,
+  B10001,
+  B10001,
+  B10001,
+  B10001,
+  B11111,
+  B00000
+};
+
+byte FILLED_RECTANGLE[] = {
+  B00000,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B00000
+};
+
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
 unsigned long left_player_time = 0;  // In seconds
@@ -64,6 +86,14 @@ bool is_button_pressed(bool* button)
 void setup()
 {
   lcd.begin(16, 2);
+  lcd.createChar(0, EMPTY_RECTANGLE);
+  lcd.createChar(1, FILLED_RECTANGLE);
+
+  lcd.setCursor(3, 0);
+  lcd.write((uint8_t) 0);
+
+  lcd.setCursor(13, 0);
+  lcd.write((uint8_t) 1);
 
   lcd.setCursor(7, 0);
   lcd.print("||");
