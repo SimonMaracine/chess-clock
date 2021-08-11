@@ -125,7 +125,7 @@ void setup()
   lcd.write((byte) 0);
 
   // Right player indicator
-  lcd.setCursor(13, 0);
+  lcd.setCursor(12, 0);
   lcd.write((byte) 1);
 
   // Middle seperator
@@ -167,7 +167,7 @@ void loop()
   }
 
   display_time(0, 1, left_player_time);
-  display_time(10, 1, right_player_time);
+  display_time(9, 1, right_player_time);
 
   delay(5);
 }
