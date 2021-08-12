@@ -87,7 +87,7 @@ void display_time(int x, int y, unsigned long player_time)
   char output[8];  // Includes the null termination character
 
   const unsigned long player_time_seconds = player_time / 10.0f;
-  
+
   const unsigned long minutes = player_time_seconds / 60;
   const unsigned long seconds = player_time_seconds % 60;
   const unsigned long deciseconds = player_time % 10;
@@ -135,7 +135,7 @@ void setup()
   lcd.write((byte) 3);
   lcd.setCursor(7, 1);
   lcd.write((byte) 3);
-  
+
   lcd.setCursor(8, 0);
   lcd.write((byte) 2);
   lcd.setCursor(8, 1);
