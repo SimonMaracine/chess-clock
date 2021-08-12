@@ -146,6 +146,7 @@ void mode_startup()
   if (is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
   {
     change_mode(mode_standard_game);
+    return;
   }
   
   lcd.setCursor(0, 0);
