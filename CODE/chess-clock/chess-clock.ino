@@ -10,17 +10,7 @@
 #define LEFT_PLAYER_BUTTON A0
 #define RIGHT_PLAYER_BUTTON A1
 
-struct Buttons
-{
-  // First - is currently pressed; second - was previously pressed
-  bool left_player[2] = { false, false };
-  bool right_player[2] = { false, false };
-};
-
-enum class Player
-{
-  Left, Right
-};
+typedef void (*mode_func)();
 
 byte EMPTY_RECTANGLE[] = {
   B00000,
@@ -66,18 +56,34 @@ byte RIGHT_PIPE[] = {
   B00001
 };
 
+enum class Player
+{
+  Left, Right
+};
+
+struct Buttons
+{
+  // First - is currently pressed; second - was previously pressed
+  bool left_player[2] = { false, false };
+  bool right_player[2] = { false, false };
+};
+
+struct GameState
+{
+  // In deciseconds; these shouldn't go past 59400
+  unsigned long left_player_time = 0;
+  unsigned long right_player_time = 0;
+
+  Player player = Player::Left;
+};
+
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
-// In deciseconds; these shouldn't go past 59400
-unsigned long left_player_time = 0;
-unsigned long right_player_time = 0;
-
-// In milliseconds
-unsigned long last_time = 0;
-
-Player player = Player::Left;
+unsigned long last_time = 0;  // In milliseconds
 
 Buttons buttons;
+GameState state;
+mode_func current_mode;
 
 void display_time(unsigned long player_time, Player player, bool show_deciseconds)
 {
@@ -129,13 +135,45 @@ bool is_button_pressed(bool* button)
     return false;
 }
 
-void setup()
+void change_mode(mode_func mode)
 {
-  lcd.begin(16, 2);
-  lcd.createChar(0, EMPTY_RECTANGLE);
-  lcd.createChar(1, FILLED_RECTANGLE);
-  lcd.createChar(2, LEFT_PIPE);
-  lcd.createChar(3, RIGHT_PIPE);
+  lcd.clear();
+  current_mode = mode;
+}
+
+void mode_startup()
+{
+  if (is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
+  {
+    change_mode(mode_standard_game);
+  }
+  
+  lcd.setCursor(0, 0);
+  lcd.print("Chess Clock");
+  lcd.setCursor(0, 1);
+  lcd.print("By Simon & Tudor");
+}
+
+void mode_standard_game()
+{
+  if (is_button_pressed(buttons.left_player) && state.player == Player::Left)
+  {
+    state.player = Player::Right;
+  }
+  else if (is_button_pressed(buttons.right_player) && state.player == Player::Right)
+  {
+    state.player = Player::Left;
+  }
+
+  if (millis() - last_time > 100)
+  {
+    if (state.player == Player::Left)
+      state.left_player_time++;
+    else
+      state.right_player_time++;
+
+    last_time = millis();
+  }
 
   // Left player indicator
   lcd.setCursor(3, 0);
@@ -155,6 +193,22 @@ void setup()
   lcd.write((byte) 2);
   lcd.setCursor(8, 1);
   lcd.write((byte) 2);
+
+  // Player times
+  display_time(state.left_player_time, Player::Left, false);
+  display_time(state.right_player_time, Player::Right, false);
+}
+
+void setup()
+{
+  lcd.begin(16, 2);
+  lcd.createChar(0, EMPTY_RECTANGLE);
+  lcd.createChar(1, FILLED_RECTANGLE);
+  lcd.createChar(2, LEFT_PIPE);
+  lcd.createChar(3, RIGHT_PIPE);
+
+  // Set initial mode to startup
+  current_mode = mode_startup;
 }
 
 void loop()
@@ -164,27 +218,7 @@ void loop()
   buttons.right_player[1] = buttons.right_player[0];
   buttons.right_player[0] = digitalRead(RIGHT_PLAYER_BUTTON);
 
-  if (is_button_pressed(buttons.left_player) && player == Player::Left)
-  {
-    player = Player::Right;
-  }
-  else if (is_button_pressed(buttons.right_player) && player == Player::Right)
-  {
-    player = Player::Left;
-  }
-
-  if (millis() - last_time > 100)
-  {
-    if (player == Player::Left)
-      left_player_time++;
-    else
-      right_player_time++;
-
-    last_time = millis();
-  }
-
-  display_time(left_player_time, Player::Left, false);
-  display_time(right_player_time, Player::Right, false);
+  current_mode();
 
   delay(5);
 }
