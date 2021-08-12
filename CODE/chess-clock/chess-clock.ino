@@ -1,4 +1,4 @@
-///Check Windows and Linux line end compatibility with git
+// Check Windows and Linux line end compatibility with git
 
 #include <LiquidCrystal.h>
 
