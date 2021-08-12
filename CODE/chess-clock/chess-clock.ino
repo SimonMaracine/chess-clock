@@ -1,3 +1,5 @@
+///Check Windows and Linux line end compatibility with git
+
 #include <LiquidCrystal.h>
 
 #define RS 2
