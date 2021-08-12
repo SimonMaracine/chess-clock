@@ -79,10 +79,11 @@ Player player = Player::Left;
 
 Buttons buttons;
 
-void display_time(int x, int y, unsigned long player_time)
+void display_time(unsigned long player_time, Player player, bool show_deciseconds)
 {
   const char ASCII_ZERO = '0';
   char output[8];  // Includes the null termination character
+  int x_position;
 
   const unsigned long player_time_seconds = player_time / 10.0f;
 
@@ -96,11 +97,26 @@ void display_time(int x, int y, unsigned long player_time)
   output[3] = ASCII_ZERO + seconds / 10;
   output[4] = ASCII_ZERO + seconds % 10;
   output[5] = '.';
-  output[6] = ASCII_ZERO + deciseconds;
 
-  output[7] = 0;
+  if (show_deciseconds)
+  {
+    output[6] = ASCII_ZERO + deciseconds;
+    output[7] = 0;
+  }
+  else
+  {
+    output[6] = 0;
+  }
 
-  lcd.setCursor(x, y);
+  if (player == Player::Left)
+    x_position = 0;
+  else
+    x_position = 9;
+
+  if (!show_deciseconds)
+    x_position++;
+
+  lcd.setCursor(x_position, 1);
   lcd.print(output);
 }
 
@@ -166,8 +182,8 @@ void loop()
     last_time = millis();
   }
 
-  display_time(0, 1, left_player_time);
-  display_time(9, 1, right_player_time);
+  display_time(left_player_time, Player::Left, false);
+  display_time(right_player_time, Player::Right, false);
 
   delay(5);
 }
