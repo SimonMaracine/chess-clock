@@ -96,16 +96,17 @@ void display_time(unsigned long player_time, Player player, bool show_decisecond
   output[2] = ':';
   output[3] = ASCII_ZERO + seconds / 10;
   output[4] = ASCII_ZERO + seconds % 10;
-  output[5] = '.';
-
+  
   if (show_deciseconds)
   {
+    output[5] = '.';
     output[6] = ASCII_ZERO + deciseconds;
     output[7] = 0;
   }
   else
   {
-    output[6] = 0;
+    output[5] = 0;
+    // The rest of output doesn't matter
   }
 
   if (player == Player::Left)
