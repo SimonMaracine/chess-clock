@@ -82,6 +82,8 @@ void change_mode(mode_func mode)
 
 void setup()
 {
+    Serial.begin(9600);
+    
     lcd.begin(16, 2);
     lcd.createChar(0, EMPTY_RECTANGLE);
     lcd.createChar(1, FILLED_RECTANGLE);

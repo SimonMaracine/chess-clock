@@ -9,8 +9,13 @@ enum class Menu
 {
     Mode = 2,
     Time = 6,
-    Deciseconds = 10,
+    Deciseconds= 10,
     Start = 14
+};
+
+enum class GameMode
+{
+    STD, Speed
 };
 
 struct Buttons
@@ -33,8 +38,11 @@ struct GameState
     Player player = Player::Right;
 
     bool start = false;
+    bool game_end = false;
 
-    unsigned long time_limit = 0;  // In deciseconds
+    unsigned long time_limit = 18000;  // In deciseconds
 
     Menu current_menu = Menu::Mode;
+    GameMode game_mode = GameMode::STD;
+    bool show_deciseconds = false;
 };

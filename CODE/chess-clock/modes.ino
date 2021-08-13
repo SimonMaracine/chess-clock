@@ -1,27 +1,30 @@
-//void setup_speed_game()
-//{
-//    // Set to two minutes (for now)
-//    state.left_player_time = 1200;
-//    state.right_player_time = 1200;
-//
-//    state.player = Player::Right;
-//}
+void setup_standard_game()
+{
+    state.left_player_time = 0;
+    state.right_player_time = 0;
+
+    state.player = Player::Right;
+
+    state.start = false;
+    state.game_end = false;
+}
+
+void setup_speed_game()
+{
+    state.left_player_time = state.time_limit;
+    state.right_player_time = state.time_limit;
+
+    state.player = Player::Right;
+
+    state.start = false;
+    state.game_end = false;
+}
 
 void mode_startup()
 {
-//    if (is_button_pressed(buttons.left_player))
-//    {
-//        change_mode(mode_standard_game);
-//        return;
-//    }
-//    else if (is_button_pressed(buttons.right_player))
-//    {
-//        change_mode(mode_speed_game);
-//        setup_speed_game();
-//        return;
-//    }
-
-    if (is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
+    if (buttons.left_player[0] || buttons.right_player[0] ||
+        buttons.start_stop[0] || buttons.soft_reset[0] ||
+        buttons.ok[0])
     {
         change_mode(mode_menu);
         return;
@@ -40,7 +43,7 @@ void mode_standard_game()
         state.start = !state.start;
     }
 
-    if (state.start)
+    if (state.start && !state.game_end)
     {
         if (is_button_pressed(buttons.left_player) && state.player == Player::Left)
         {
@@ -64,8 +67,14 @@ void mode_standard_game()
         if (state.left_player_time == state.time_limit ||
                 state.right_player_time == state.time_limit)
         {
-            state.start = false;
+            state.game_end = true;
         }
+    }
+
+    if (is_button_pressed(buttons.soft_reset))
+    {
+        change_mode(mode_menu);
+        return;
     }
 
     // Left player indicator
@@ -105,8 +114,16 @@ void mode_standard_game()
     }
 
     // Player times
-    display_time(state.left_player_time, Player::Left, false);
-    display_time(state.right_player_time, Player::Right, false);
+    if (state.show_deciseconds)
+    {
+        display_time(state.left_player_time, Player::Left, true);
+        display_time(state.right_player_time, Player::Right, true);
+    }
+    else
+    {
+        display_time(state.left_player_time, Player::Left, false);
+        display_time(state.right_player_time, Player::Right, false);
+    }
 }
 
 void mode_speed_game()
@@ -116,7 +133,7 @@ void mode_speed_game()
         state.start = !state.start;
     }
 
-    if (state.start)
+    if (state.start && !state.game_end)
     {
         if (is_button_pressed(buttons.left_player) && state.player == Player::Left)
         {
@@ -139,8 +156,14 @@ void mode_speed_game()
 
         if (state.left_player_time == 0 || state.right_player_time == 0)
         {
-            state.start = false;
+            state.game_end = true;
         }
+    }
+
+    if (is_button_pressed(buttons.soft_reset))
+    {
+        change_mode(mode_menu);
+        return;
     }
 
     // Left player indicator
@@ -180,8 +203,16 @@ void mode_speed_game()
     }
 
     // Player times
-    display_time(state.left_player_time, Player::Left, false);
-    display_time(state.right_player_time, Player::Right, false);
+    if (state.show_deciseconds)
+    {
+        display_time(state.left_player_time, Player::Left, true);
+        display_time(state.right_player_time, Player::Right, true);
+    }
+    else
+    {
+        display_time(state.left_player_time, Player::Left, false);
+        display_time(state.right_player_time, Player::Right, false);
+    }
 }
 
 void mode_menu()
@@ -207,7 +238,6 @@ void mode_menu()
 
         if (state.current_menu == Menu::Start)
         {
-        
             state.current_menu = Menu::Mode;
         }
         else
@@ -217,7 +247,31 @@ void mode_menu()
     }
     else if (is_button_pressed(buttons.ok))
     {
-        
+        switch (state.current_menu)
+        {
+            case Menu::Mode:
+                change_mode(mode_modes);
+                return;
+            case Menu::Time:
+                change_mode(mode_time);
+                return;
+            case Menu::Deciseconds:
+                change_mode(mode_deciseconds);
+                return;
+            case Menu::Start:
+                switch (state.game_mode)
+                {
+                    case GameMode::STD:
+                        setup_standard_game();
+                        change_mode(mode_standard_game);
+                        return;
+                    case GameMode::Speed:
+                        setup_speed_game();
+                        change_mode(mode_speed_game);
+                        return;
+                }
+                break;
+        }
     }
 
     lcd.setCursor(3, 0);
@@ -234,4 +288,105 @@ void mode_menu()
 
     lcd.setCursor((int) state.current_menu, 1);
     lcd.write((byte) 4);
+}
+
+void mode_modes()
+{
+    if (is_button_pressed(buttons.left_player))
+    {
+        switch (state.game_mode)
+        {
+            case GameMode::STD:
+                state.game_mode = GameMode::Speed;
+                break;
+            case GameMode::Speed:
+                state.game_mode = GameMode::STD;
+                break;
+        }
+    }
+    else if (is_button_pressed(buttons.right_player))
+    {
+        switch (state.game_mode)
+        {
+            case GameMode::STD:
+                state.game_mode = GameMode::Speed;
+                break;
+            case GameMode::Speed:
+                state.game_mode = GameMode::STD;
+                break;
+        }
+    }
+    else if (is_button_pressed(buttons.ok))
+    {
+        change_mode(mode_menu);
+        return;
+    }
+
+    lcd.setCursor(0, 0);
+    lcd.print("Set Game Mode:");
+
+    lcd.setCursor(0, 1);
+    switch (state.game_mode)
+    {
+        case GameMode::STD:
+            lcd.print("Standard Game   ");
+            break;
+        case GameMode::Speed:
+            lcd.print("Speed Game      ");
+            break;
+    }
+}
+
+void mode_time()
+{
+    if (buttons.left_player[0] && state.time_limit > 600)
+    {
+        state.time_limit -= 600;
+        delay(200);
+    }
+    
+    if (buttons.right_player[0] && state.time_limit < 54000)
+    {
+        state.time_limit += 600;
+        delay(200);
+    }
+
+    if (is_button_pressed(buttons.ok))
+    {
+        change_mode(mode_menu);
+        return;
+    }
+    
+    lcd.setCursor(0, 0);
+    lcd.print("Set Time Limit:");
+
+    lcd.setCursor(0, 1);
+    lcd.print(state.time_limit / 600);
+    lcd.print(" ");
+}
+
+void mode_deciseconds()
+{
+    if (is_button_pressed(buttons.left_player))
+    {
+        state.show_deciseconds = !state.show_deciseconds;
+    }
+    else if (is_button_pressed(buttons.right_player))
+    {
+        state.show_deciseconds = !state.show_deciseconds;
+    }
+    else if (is_button_pressed(buttons.ok))
+    {
+        change_mode(mode_menu);
+        return;
+    }
+    
+    lcd.setCursor(0, 0);
+    lcd.print("Show Deciseconds:");
+
+    lcd.setCursor(0, 1);
+    if (state.show_deciseconds)
+        lcd.print("On ");
+    else
+        lcd.print("Off");
 }
