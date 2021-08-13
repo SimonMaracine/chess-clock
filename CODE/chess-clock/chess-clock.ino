@@ -12,7 +12,9 @@
 
 #define LEFT_PLAYER_BUTTON A0
 #define RIGHT_PLAYER_BUTTON A1
-#define START_PAUSE_BUTTON A2
+#define START_STOP_BUTTON A2
+#define SOFT_RESET_BUTTON A3
+#define OK_BUTTON A4
 
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
@@ -97,8 +99,12 @@ void loop()
     buttons.left_player[0] = digitalRead(LEFT_PLAYER_BUTTON);
     buttons.right_player[1] = buttons.right_player[0];
     buttons.right_player[0] = digitalRead(RIGHT_PLAYER_BUTTON);
-    buttons.start_pause[1] = buttons.start_pause[0];
-    buttons.start_pause[0] = digitalRead(START_PAUSE_BUTTON);
+    buttons.start_stop[1] = buttons.start_stop[0];
+    buttons.start_stop[0] = digitalRead(START_STOP_BUTTON);
+    buttons.soft_reset[1] = buttons.soft_reset[0];
+    buttons.soft_reset[0] = digitalRead(SOFT_RESET_BUTTON);
+    buttons.ok[1] = buttons.ok[0];
+    buttons.ok[0] = digitalRead(OK_BUTTON);
 
     current_mode();
 

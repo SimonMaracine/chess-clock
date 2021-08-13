@@ -5,12 +5,22 @@ enum class Player
     Left, Right
 };
 
+enum class Menu
+{
+    Mode = 2,
+    Time = 6,
+    Deciseconds = 10,
+    Start = 14
+};
+
 struct Buttons
 {
     // First - is currently pressed; second - was previously pressed
     bool left_player[2] = { false, false };
     bool right_player[2] = { false, false };
-    bool start_pause[2] = { false, false };
+    bool start_stop[2] = { false, false };
+    bool soft_reset[2] = { false, false };
+    bool ok[2] = { false, false };
 };
 
 struct GameState
@@ -23,4 +33,8 @@ struct GameState
     Player player = Player::Right;
 
     bool start = false;
+
+    unsigned long time_limit = 0;  // In deciseconds
+
+    Menu current_menu = Menu::Mode;
 };

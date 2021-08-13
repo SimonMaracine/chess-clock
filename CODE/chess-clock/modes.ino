@@ -1,31 +1,31 @@
-void setup_speed_game()
-{
-    // Set to two minutes (for now)
-    state.left_player_time = 1200;
-    state.right_player_time = 1200;
-
-    state.player = Player::Right;
-}
+//void setup_speed_game()
+//{
+//    // Set to two minutes (for now)
+//    state.left_player_time = 1200;
+//    state.right_player_time = 1200;
+//
+//    state.player = Player::Right;
+//}
 
 void mode_startup()
 {
-    if (is_button_pressed(buttons.left_player))
-    {
-        change_mode(mode_standard_game);
-        return;
-    }
-    else if (is_button_pressed(buttons.right_player))
-    {
-        change_mode(mode_speed_game);
-        setup_speed_game();
-        return;
-    }
-
-//    if (is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
+//    if (is_button_pressed(buttons.left_player))
 //    {
-//        change_mode(mode_menu);
+//        change_mode(mode_standard_game);
 //        return;
 //    }
+//    else if (is_button_pressed(buttons.right_player))
+//    {
+//        change_mode(mode_speed_game);
+//        setup_speed_game();
+//        return;
+//    }
+
+    if (is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
+    {
+        change_mode(mode_menu);
+        return;
+    }
 
     lcd.setCursor(0, 0);
     lcd.print("Chess Clock v1.0");
@@ -35,7 +35,7 @@ void mode_startup()
 
 void mode_standard_game()
 {
-    if (is_button_pressed(buttons.start_pause))
+    if (is_button_pressed(buttons.start_stop))
     {
         state.start = !state.start;
     }
@@ -59,6 +59,12 @@ void mode_standard_game()
                 state.right_player_time++;
 
             last_time = millis();
+        }
+
+        if (state.left_player_time == state.time_limit ||
+                state.right_player_time == state.time_limit)
+        {
+            state.start = false;
         }
     }
 
@@ -105,7 +111,7 @@ void mode_standard_game()
 
 void mode_speed_game()
 {
-    if (is_button_pressed(buttons.start_pause))
+    if (is_button_pressed(buttons.start_stop))
     {
         state.start = !state.start;
     }
@@ -129,6 +135,11 @@ void mode_speed_game()
                 state.right_player_time--;
 
             last_time = millis();
+        }
+
+        if (state.left_player_time == 0 || state.right_player_time == 0)
+        {
+            state.start = false;
         }
     }
 
@@ -171,4 +182,56 @@ void mode_speed_game()
     // Player times
     display_time(state.left_player_time, Player::Left, false);
     display_time(state.right_player_time, Player::Right, false);
+}
+
+void mode_menu()
+{
+    if (is_button_pressed(buttons.left_player))
+    {
+        lcd.setCursor((int) state.current_menu, 1);
+        lcd.print(' ');
+
+        if (state.current_menu == Menu::Mode)
+        {
+            state.current_menu = Menu::Start;
+        }
+        else
+        {
+            state.current_menu = (Menu) ((int) state.current_menu - 4);
+        }
+    }
+    else if (is_button_pressed(buttons.right_player))
+    {
+        lcd.setCursor((int) state.current_menu, 1);
+        lcd.print(' ');
+
+        if (state.current_menu == Menu::Start)
+        {
+        
+            state.current_menu = Menu::Mode;
+        }
+        else
+        {
+            state.current_menu = (Menu) ((int) state.current_menu + 4);
+        }
+    }
+    else if (is_button_pressed(buttons.ok))
+    {
+        
+    }
+
+    lcd.setCursor(3, 0);
+    lcd.print("Setup Menu");
+
+    lcd.setCursor(1, 1);
+    lcd.print('M');
+    lcd.setCursor(5, 1);
+    lcd.print('T');
+    lcd.setCursor(9, 1);
+    lcd.print('D');
+    lcd.setCursor(13, 1);
+    lcd.print('S');
+
+    lcd.setCursor((int) state.current_menu, 1);
+    lcd.write((byte) 4);
 }
