@@ -1,5 +1,8 @@
 #include <LiquidCrystal.h>
 
+#include "characters.h"
+#include "definitions.h"
+
 #define RS 2
 #define E 3
 #define D4 4
@@ -9,74 +12,6 @@
 
 #define LEFT_PLAYER_BUTTON A0
 #define RIGHT_PLAYER_BUTTON A1
-
-typedef void (*mode_func)();
-
-byte EMPTY_RECTANGLE[] = {
-  B00000,
-  B11111,
-  B10001,
-  B10001,
-  B10001,
-  B10001,
-  B11111,
-  B00000
-};
-
-byte FILLED_RECTANGLE[] = {
-  B00000,
-  B11111,
-  B11111,
-  B11111,
-  B11111,
-  B11111,
-  B11111,
-  B00000
-};
-
-byte LEFT_PIPE[] = {
-  B10000,
-  B10000,
-  B10000,
-  B10000,
-  B10000,
-  B10000,
-  B10000,
-  B10000
-};
-
-byte RIGHT_PIPE[] = {
-  B00001,
-  B00001,
-  B00001,
-  B00001,
-  B00001,
-  B00001,
-  B00001,
-  B00001
-};
-
-enum class Player
-{
-  Left, Right
-};
-
-struct Buttons
-{
-  // First - is currently pressed; second - was previously pressed
-  bool left_player[2] = { false, false };
-  bool right_player[2] = { false, false };
-};
-
-struct GameState
-{
-  // In deciseconds; these shouldn't go past 59400
-  unsigned long left_player_time = 0;
-  unsigned long right_player_time = 0;
-
-  // Right player starts (white player)
-  Player player = Player::Right;
-};
 
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
@@ -149,6 +84,7 @@ void setup()
   lcd.createChar(1, FILLED_RECTANGLE);
   lcd.createChar(2, LEFT_PIPE);
   lcd.createChar(3, RIGHT_PIPE);
+  lcd.createChar(4, TURN_INDICATOR);
 
   // Set initial mode to startup
   current_mode = mode_startup;

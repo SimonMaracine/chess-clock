@@ -73,6 +73,23 @@ void mode_standard_game()
   lcd.setCursor(8, 1);
   lcd.write((byte) 2);
 
+  if (state.player == Player::Left)
+  {
+    lcd.setCursor(12, 0);
+    lcd.print(' ');
+
+    lcd.setCursor(3, 0);
+    lcd.write((byte) 4);
+  }
+  else
+  {
+    lcd.setCursor(3, 0);
+    lcd.print(' ');
+
+    lcd.setCursor(12, 0);
+    lcd.write((byte) 4);
+  }
+
   // Player times
   display_time(state.left_player_time, Player::Left, false);
   display_time(state.right_player_time, Player::Right, false);
@@ -117,6 +134,23 @@ void mode_speed_game()
   lcd.write((byte) 2);
   lcd.setCursor(8, 1);
   lcd.write((byte) 2);
+
+  if (state.player == Player::Left)
+  {
+    lcd.setCursor(12, 0);
+    lcd.print(' ');
+
+    lcd.setCursor(3, 0);
+    lcd.write((byte) 4);
+  }
+  else
+  {
+    lcd.setCursor(3, 0);
+    lcd.print(' ');
+
+    lcd.setCursor(12, 0);
+    lcd.write((byte) 4);
+  }
 
   // Player times
   display_time(state.left_player_time, Player::Left, false);
