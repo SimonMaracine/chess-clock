@@ -3,7 +3,7 @@ void setup_speed_game()
   // Set to two minutes (for now)
   state.left_player_time = 1200;
   state.right_player_time = 1200;
-  
+
   state.player = Player::Right;
 }
 
@@ -28,7 +28,7 @@ void mode_startup()
 //  }
 
   lcd.setCursor(0, 0);
-  lcd.print("Chess Clock");
+  lcd.print("Chess Clock v1.0");
   lcd.setCursor(0, 1);
   lcd.print("By Simon & Tudor");
 }
@@ -55,11 +55,11 @@ void mode_standard_game()
   }
 
   // Left player indicator
-  lcd.setCursor(3, 0);
+  lcd.setCursor(0, 0);
   lcd.write((byte) 0);
 
   // Right player indicator
-  lcd.setCursor(12, 0);
+  lcd.setCursor(15, 0);
   lcd.write((byte) 1);
 
   // Middle seperator
@@ -100,11 +100,11 @@ void mode_speed_game()
   }
 
   // Left player indicator
-  lcd.setCursor(3, 0);
+  lcd.setCursor(0, 0);
   lcd.write((byte) 0);
 
   // Right player indicator
-  lcd.setCursor(12, 0);
+  lcd.setCursor(15, 0);
   lcd.write((byte) 1);
 
   // Middle seperator
