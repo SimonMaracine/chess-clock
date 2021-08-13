@@ -2,7 +2,7 @@ void setup_speed_game()
 {
   // Set to two minutes (for now)
   state.left_player_time = 1200;
-  state.left_player_time = 1200;
+  state.right_player_time = 1200;
   
   state.player = Player::Right;
 }
