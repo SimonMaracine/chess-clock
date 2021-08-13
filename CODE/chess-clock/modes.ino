@@ -79,22 +79,22 @@ void mode_standard_game()
 
     // Left player indicator
     lcd.setCursor(0, 0);
-    lcd.write((byte) 0);
+    lcd.write((byte) EMPTY_RECTANGLE);
 
     // Right player indicator
     lcd.setCursor(15, 0);
-    lcd.write((byte) 1);
+    lcd.write((byte) FILLED_RECTANGLE);
 
     // Middle seperator
     lcd.setCursor(7, 0);
-    lcd.write((byte) 3);
+    lcd.write((byte) RIGHT_PIPE);
     lcd.setCursor(7, 1);
-    lcd.write((byte) 3);
+    lcd.write((byte) RIGHT_PIPE);
 
     lcd.setCursor(8, 0);
-    lcd.write((byte) 2);
+    lcd.write((byte) LEFT_PIPE);
     lcd.setCursor(8, 1);
-    lcd.write((byte) 2);
+    lcd.write((byte) LEFT_PIPE);
 
     if (state.player == Player::Left)
     {
@@ -102,7 +102,7 @@ void mode_standard_game()
         lcd.print(' ');
 
         lcd.setCursor(3, 0);
-        lcd.write((byte) 4);
+        lcd.write((byte) TURN_INDICATOR);
     }
     else
     {
@@ -110,7 +110,7 @@ void mode_standard_game()
         lcd.print(' ');
 
         lcd.setCursor(12, 0);
-        lcd.write((byte) 4);
+        lcd.write((byte) TURN_INDICATOR);
     }
 
     // Player times
@@ -168,22 +168,22 @@ void mode_speed_game()
 
     // Left player indicator
     lcd.setCursor(0, 0);
-    lcd.write((byte) 0);
+    lcd.write((byte) EMPTY_RECTANGLE);
 
     // Right player indicator
     lcd.setCursor(15, 0);
-    lcd.write((byte) 1);
+    lcd.write((byte) FILLED_RECTANGLE);
 
     // Middle seperator
     lcd.setCursor(7, 0);
-    lcd.write((byte) 3);
+    lcd.write((byte) RIGHT_PIPE);
     lcd.setCursor(7, 1);
-    lcd.write((byte) 3);
+    lcd.write((byte) RIGHT_PIPE);
 
     lcd.setCursor(8, 0);
-    lcd.write((byte) 2);
+    lcd.write((byte) LEFT_PIPE);
     lcd.setCursor(8, 1);
-    lcd.write((byte) 2);
+    lcd.write((byte) LEFT_PIPE);
 
     if (state.player == Player::Left)
     {
@@ -191,7 +191,7 @@ void mode_speed_game()
         lcd.print(' ');
 
         lcd.setCursor(3, 0);
-        lcd.write((byte) 4);
+        lcd.write((byte) TURN_INDICATOR);
     }
     else
     {
@@ -199,7 +199,7 @@ void mode_speed_game()
         lcd.print(' ');
 
         lcd.setCursor(12, 0);
-        lcd.write((byte) 4);
+        lcd.write((byte) TURN_INDICATOR);
     }
 
     // Player times
@@ -287,7 +287,7 @@ void mode_menu()
     lcd.print('S');
 
     lcd.setCursor((int) state.current_menu, 1);
-    lcd.write((byte) 4);
+    lcd.write((byte) TURN_INDICATOR);
 }
 
 void mode_modes()
@@ -339,15 +339,15 @@ void mode_modes()
 
 void mode_time()
 {
-    if (buttons.left_player[0] && state.time_limit > 600)
+    if (buttons.left_player[0] && state.time_limit > ONE_MINUTE)
     {
-        state.time_limit -= 600;
+        state.time_limit -= ONE_MINUTE;
         delay(200);
     }
-    
-    if (buttons.right_player[0] && state.time_limit < 54000)
+
+    if (buttons.right_player[0] && state.time_limit < NINETY_MINUTES)
     {
-        state.time_limit += 600;
+        state.time_limit += ONE_MINUTE;
         delay(200);
     }
 
@@ -356,12 +356,12 @@ void mode_time()
         change_mode(mode_menu);
         return;
     }
-    
+
     lcd.setCursor(0, 0);
     lcd.print("Set Time Limit:");
 
     lcd.setCursor(0, 1);
-    lcd.print(state.time_limit / 600);
+    lcd.print(state.time_limit / ONE_MINUTE);
     lcd.print(" ");
 }
 
