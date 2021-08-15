@@ -52,3 +52,15 @@ byte TURN_INDICATOR[] = {
     B00000,
     B00000
 };
+
+///Start flag image
+byte customChar[] = {
+  B10101,
+  B01011,
+  B10101,
+  B01011,
+  B00001,
+  B00001,
+  B00001,
+  B00001
+};
