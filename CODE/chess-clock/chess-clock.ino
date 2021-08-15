@@ -3,19 +3,6 @@
 #include "characters.h"
 #include "definitions.h"
 
-#define RS 2
-#define E 3
-#define D4 4
-#define D5 5
-#define D6 6
-#define D7 7
-
-#define LEFT_PLAYER_BUTTON A0
-#define RIGHT_PLAYER_BUTTON A1
-#define START_STOP_BUTTON A2
-#define SOFT_RESET_BUTTON A3
-#define OK_BUTTON A4
-
 LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
 
 unsigned long last_time = 0;  // In milliseconds
@@ -85,11 +72,11 @@ void setup()
     Serial.begin(9600);
     
     lcd.begin(16, 2);
-    lcd.createChar(0, EMPTY_RECTANGLE);
-    lcd.createChar(1, FILLED_RECTANGLE);
-    lcd.createChar(2, LEFT_PIPE);
-    lcd.createChar(3, RIGHT_PIPE);
-    lcd.createChar(4, TURN_INDICATOR);
+    lcd.createChar(EMPTY_RECTANGLE, empty_rectangle);
+    lcd.createChar(FILLED_RECTANGLE, filled_rectangle);
+    lcd.createChar(LEFT_PIPE, left_pipe);
+    lcd.createChar(RIGHT_PIPE, right_pipe);
+    lcd.createChar(TURN_INDICATOR, turn_indicator);
 
     // Set initial mode to startup
     current_mode = mode_startup;
