@@ -59,8 +59,7 @@ byte turn_indicator[] = {
     B00000
 };
 
-///Start flag image
-byte customChar[] = {
+byte start_flag[] = {
   B10101,
   B01011,
   B10101,
@@ -70,3 +69,26 @@ byte customChar[] = {
   B00001,
   B00001
 };
+
+byte up_arrow[] = {
+  B00100,
+  B01110,
+  B11111,
+  B00100,
+  B00100,
+  B00100,
+  B00100,
+  B00100
+};
+
+byte down_arrow[] = {
+  B00100,
+  B00100,
+  B00100,
+  B00100,
+  B00100,
+  B11111,
+  B01110,
+  B00100
+};
+
