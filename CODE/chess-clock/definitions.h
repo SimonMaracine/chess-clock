@@ -1,3 +1,6 @@
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+
 #define RS 2
 #define E 3
 #define D4 4
@@ -15,8 +18,6 @@
 #define NINETY_MINUTES 54000
 #define ONE_MINUTE 600
 
-typedef void (*mode_func)();
-
 enum class Player
 {
     Left, Right
@@ -32,7 +33,7 @@ enum class Menu
 
 enum class GameMode
 {
-    STD, Speed
+    TwoClockUp, TwoClockDown
 };
 
 struct Buttons
@@ -61,5 +62,9 @@ struct GameState
     bool show_deciseconds = false;
 
     Menu current_menu = Menu::Mode;
-    GameMode game_mode = GameMode::STD;
+    GameMode game_mode = GameMode::TwoClockUp;
 };
+
+typedef void (*mode_func)();
+
+#endif  // DEFINITIONS_H

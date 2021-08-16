@@ -1,4 +1,26 @@
-void setup_standard_game()
+#include <Arduino.h>
+#include <LiquidCrystal.h>
+
+#include "definitions.h"
+#include "modes.h"
+#include "characters.h"
+#include "helpers.h"
+
+void mode_startup();
+void mode_two_clock_up();
+void mode_two_clock_down();
+void mode_menu();
+void mode_modes();
+void mode_time();
+void mode_deciseconds();
+
+extern LiquidCrystal lcd;
+extern unsigned long last_time;
+extern Buttons buttons;
+extern GameState state;
+extern mode_func current_mode;
+
+void setup_two_clock_up()
 {
     state.left_player_time = 0;
     state.right_player_time = 0;
@@ -9,7 +31,7 @@ void setup_standard_game()
     state.game_end = false;
 }
 
-void setup_speed_game()
+void setup_two_clock_down()
 {
     state.left_player_time = state.time_limit;
     state.right_player_time = state.time_limit;
@@ -33,10 +55,10 @@ void mode_startup()
     lcd.setCursor(0, 0);
     lcd.print("Chess Clock v1.0");
     lcd.setCursor(0, 1);
-    lcd.print("By Simon & Tudor");
+    lcd.print("By Tudor & Simon");
 }
 
-void mode_standard_game()
+void mode_two_clock_up()
 {
     if (is_button_pressed(buttons.start_stop))
     {
@@ -126,7 +148,7 @@ void mode_standard_game()
     }
 }
 
-void mode_speed_game()
+void mode_two_clock_down()
 {
     if (is_button_pressed(buttons.start_stop))
     {
@@ -261,16 +283,15 @@ void mode_menu()
             case Menu::Start:
                 switch (state.game_mode)
                 {
-                    case GameMode::STD:
-                        setup_standard_game();
-                        change_mode(mode_standard_game);
+                    case GameMode::TwoClockUp:
+                        setup_two_clock_up();
+                        change_mode(mode_two_clock_up);
                         return;
-                    case GameMode::Speed:
-                        setup_speed_game();
-                        change_mode(mode_speed_game);
+                    case GameMode::TwoClockDown:
+                        setup_two_clock_down();
+                        change_mode(mode_two_clock_down);
                         return;
                 }
-                break;
         }
     }
 
@@ -284,7 +305,7 @@ void mode_menu()
     lcd.setCursor(9, 1);
     lcd.print('D');
     lcd.setCursor(13, 1);
-    lcd.print('S');
+    lcd.write((byte) START_FLAG);
 
     lcd.setCursor((int) state.current_menu, 1);
     lcd.write((byte) TURN_INDICATOR);
@@ -296,11 +317,11 @@ void mode_modes()
     {
         switch (state.game_mode)
         {
-            case GameMode::STD:
-                state.game_mode = GameMode::Speed;
+            case GameMode::TwoClockUp:
+                state.game_mode = GameMode::TwoClockDown;
                 break;
-            case GameMode::Speed:
-                state.game_mode = GameMode::STD;
+            case GameMode::TwoClockDown:
+                state.game_mode = GameMode::TwoClockUp;
                 break;
         }
     }
@@ -308,11 +329,11 @@ void mode_modes()
     {
         switch (state.game_mode)
         {
-            case GameMode::STD:
-                state.game_mode = GameMode::Speed;
+            case GameMode::TwoClockUp:
+                state.game_mode = GameMode::TwoClockDown;
                 break;
-            case GameMode::Speed:
-                state.game_mode = GameMode::STD;
+            case GameMode::TwoClockDown:
+                state.game_mode = GameMode::TwoClockUp;
                 break;
         }
     }
@@ -328,11 +349,13 @@ void mode_modes()
     lcd.setCursor(0, 1);
     switch (state.game_mode)
     {
-        case GameMode::STD:
-            lcd.print("Standard Game   ");
+        case GameMode::TwoClockUp:
+            lcd.print("Two Clock ");
+            lcd.write((byte) UP_ARROW);  // TODO If you add more game modes, then this may write some additional spaces
             break;
-        case GameMode::Speed:
-            lcd.print("Speed Game      ");
+        case GameMode::TwoClockDown:
+            lcd.print("Two Clock ");
+            lcd.write((byte) DOWN_ARROW);
             break;
     }
 }
