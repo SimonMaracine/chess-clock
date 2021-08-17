@@ -16,7 +16,9 @@
 
 #define THIRTY_MINUTES 18000
 #define NINETY_MINUTES 54000
-#define ONE_MINUTE 600
+#define THREE_MINUTES 1800
+#define ONE_MINUTE 600 
+#define ONE_SECOND 10
 
 enum class Player
 {
@@ -60,6 +62,8 @@ struct GameState
 
     bool start = false;
     bool game_end = false;
+
+    bool set_time_in_seconds;
 
     unsigned long time_limit = THIRTY_MINUTES;  // In deciseconds
     bool show_deciseconds = false;

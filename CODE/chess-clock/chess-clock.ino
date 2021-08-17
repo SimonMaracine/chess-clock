@@ -28,6 +28,9 @@ void setup()
 
     // Set initial mode to startup
     current_mode = mode_startup;
+
+    ///Set initial time setup in minutes
+    state.set_time_in_seconds = false;
 }
 
 void loop()

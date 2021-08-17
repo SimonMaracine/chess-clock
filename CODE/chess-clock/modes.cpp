@@ -14,6 +14,7 @@ void mode_one_clock_down();
 void mode_menu();
 void mode_modes();
 void mode_time();
+void mode_submenu_time();
 void mode_deciseconds();
 
 extern LiquidCrystal lcd;
@@ -393,7 +394,7 @@ void mode_menu()
                 change_mode(mode_modes);
                 return;
             case Menu::Time:
-                change_mode(mode_time);
+                change_mode(mode_submenu_time);
                 return;
             case Menu::Deciseconds:
                 change_mode(mode_deciseconds);
@@ -508,17 +509,35 @@ void mode_modes()
 
 void mode_time()
 {
-    if (buttons.left_player[0] && state.time_limit > ONE_MINUTE)
+    if(!state.set_time_in_seconds)
     {
-        state.time_limit -= ONE_MINUTE;
-        delay(200);
+        if (buttons.left_player[0] && state.time_limit > ONE_MINUTE)
+        {
+            state.time_limit -= ONE_MINUTE;
+            delay(200);
+        }
+    
+        if (buttons.right_player[0] && state.time_limit < NINETY_MINUTES)
+        {
+            state.time_limit += ONE_MINUTE;
+            delay(200);
+        }
     }
-
-    if (buttons.right_player[0] && state.time_limit < NINETY_MINUTES)
+    else   ///Set time in seconds (max three minutes)
     {
-        state.time_limit += ONE_MINUTE;
-        delay(200);
+        if (buttons.left_player[0] && state.time_limit > ONE_SECOND)
+        {
+            state.time_limit -= ONE_SECOND;
+            delay(200);
+        }
+    
+        if (buttons.right_player[0] && state.time_limit < THREE_MINUTES)
+        {
+            state.time_limit += ONE_SECOND;
+            delay(200);
+        }
     }
+    
 
     if (is_button_pressed(buttons.ok))
     {
@@ -532,6 +551,50 @@ void mode_time()
     lcd.setCursor(0, 1);
     lcd.print(state.time_limit / ONE_MINUTE);
     lcd.print(" ");
+}
+
+void mode_submenu_time()
+{
+    if(is_button_pressed(buttons.left_player))
+    {
+        state.set_time_in_seconds = !state.set_time_in_seconds;
+
+        if(!state.set_time_in_seconds)  /// Avoid setting both in seconds and minutes and confusing the time_limit
+        {
+            state.time_limit = THIRTY_MINUTES;
+        }
+        else
+        {
+            state.time_limit = ONE_MINUTE;
+        }
+    }
+    else if(is_button_pressed(buttons.left_player)
+    {
+        state.set_time_in_seconds = !state.set_time_in_seconds;
+
+        if(!state.set_time_in_seconds)  /// Avoid setting both in seconds and minutes and confusing the time_limit
+        {
+            state.time_limit = THIRTY_MINUTES;
+        }
+        else
+        {
+            state.time_limit = ONE_MINUTE;
+        }
+    }
+
+    if (is_button_pressed(buttons.ok))
+    {
+        change_mode(mode_time);
+        return;
+    }
+
+    lcd.setCursor(0, 0);
+    lcd.print("Set time in:");
+    lcd.setCursor((0, 1);
+    if(!state.set_time_in_seconds)
+        lcd.print("minutes ");
+    else
+        lcd.print("seconds ");
 }
 
 void mode_deciseconds()
