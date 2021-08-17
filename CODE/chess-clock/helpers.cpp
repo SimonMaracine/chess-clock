@@ -1,6 +1,9 @@
+#include <Arduino.h>
 #include <LiquidCrystal.h>
 
+#include "helpers.h"
 #include "definitions.h"
+#include "characters.h"
 
 extern LiquidCrystal lcd;
 extern mode_func current_mode;
@@ -98,4 +101,26 @@ void display_time_one(unsigned long time, bool show_deciseconds)
 
     lcd.setCursor(x_position, 1);
     lcd.print(output);
+}
+
+void display_progress_bar(unsigned long time, unsigned long time_limit, Monotony monotony)
+{
+    const int NUM_CELLS = 16;
+    int cells_filled;
+
+    if (monotony == Monotony::Ascend)
+    {
+        int value = map(time_limit - time, time_limit, 0, 0, time_limit);
+        cells_filled = map(value, 0, time_limit, 0, NUM_CELLS);
+    }
+    else
+    {
+        cells_filled = map(time_limit - time, 0, time_limit, 0, NUM_CELLS);
+    }
+
+    lcd.setCursor(0, 0);
+    for (int i = 0; i < cells_filled; i++)
+    {
+        lcd.write((byte) FILLED_RECTANGLE);
+    }
 }

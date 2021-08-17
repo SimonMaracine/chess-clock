@@ -268,6 +268,8 @@ void mode_one_clock_up()
         state.start = false;
         state.game_end = false;
         state.right_player_time = 0;
+        lcd.setCursor(0, 0);
+        lcd.print("                ");
     }
 
     if (state.start && !state.game_end)
@@ -299,6 +301,8 @@ void mode_one_clock_up()
     {
         display_time_one(state.right_player_time, false);
     }
+
+    display_progress_bar(state.right_player_time, state.time_limit, Monotony::Ascend);
 }
 
 void mode_one_clock_down()
@@ -314,6 +318,8 @@ void mode_one_clock_down()
         state.start = false;
         state.game_end = false;
         state.right_player_time = state.time_limit;
+        lcd.setCursor(0, 0);
+        lcd.print("                ");
     }
 
     if (state.start && !state.game_end)
@@ -345,6 +351,8 @@ void mode_one_clock_down()
     {
         display_time_one(state.right_player_time, false);
     }
+
+    display_progress_bar(state.right_player_time, state.time_limit, Monotony::Descend);
 }
 
 void mode_menu()
