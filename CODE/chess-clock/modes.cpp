@@ -568,7 +568,7 @@ void mode_submenu_time()
             state.time_limit = ONE_MINUTE;
         }
     }
-    else if(is_button_pressed(buttons.left_player)
+    else if(is_button_pressed(buttons.left_player))
     {
         state.set_time_in_seconds = !state.set_time_in_seconds;
 
@@ -590,7 +590,7 @@ void mode_submenu_time()
 
     lcd.setCursor(0, 0);
     lcd.print("Set time in:");
-    lcd.setCursor((0, 1);
+    lcd.setCursor(0, 1);
     if(!state.set_time_in_seconds)
         lcd.print("minutes ");
     else
