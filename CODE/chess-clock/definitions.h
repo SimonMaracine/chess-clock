@@ -33,7 +33,10 @@ enum class Menu
 
 enum class GameMode
 {
-    TwoClockUp, TwoClockDown
+    TwoClockUp,
+    TwoClockDown,
+    OneClockUp,
+    OneClockDown
 };
 
 struct Buttons

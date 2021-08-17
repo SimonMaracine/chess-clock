@@ -9,6 +9,8 @@
 void mode_startup();
 void mode_two_clock_up();
 void mode_two_clock_down();
+void mode_one_clock_up();
+void mode_one_clock_down();
 void mode_menu();
 void mode_modes();
 void mode_time();
@@ -37,6 +39,22 @@ void setup_two_clock_down()
     state.right_player_time = state.time_limit;
 
     state.player = Player::Right;
+
+    state.start = false;
+    state.game_end = false;
+}
+
+void setup_one_clock_up()
+{
+    state.right_player_time = 0;
+
+    state.start = false;
+    state.game_end = false;
+}
+
+void setup_one_clock_down()
+{
+    state.right_player_time = state.time_limit;
 
     state.start = false;
     state.game_end = false;
@@ -237,6 +255,98 @@ void mode_two_clock_down()
     }
 }
 
+void mode_one_clock_up()
+{
+    if (is_button_pressed(buttons.start_stop) ||
+        is_button_pressed(buttons.left_player) ||
+        is_button_pressed(buttons.right_player))
+    {
+        state.start = !state.start;
+    }
+    else if (is_button_pressed(buttons.ok))
+    {
+        state.start = false;
+        state.game_end = false;
+        state.right_player_time = 0;
+    }
+
+    if (state.start && !state.game_end)
+    {
+        if (millis() - last_time > 100)
+        {
+            state.right_player_time++;
+
+            last_time = millis();
+        }
+
+        if (state.right_player_time == state.time_limit)
+        {
+            state.game_end = true;
+        }
+    }
+
+    if (is_button_pressed(buttons.soft_reset))
+    {
+        change_mode(mode_menu);
+        return;
+    }
+
+    if (state.show_deciseconds)
+    {
+        display_time_one(state.right_player_time, true);
+    }
+    else
+    {
+        display_time_one(state.right_player_time, false);
+    }
+}
+
+void mode_one_clock_down()
+{
+    if (is_button_pressed(buttons.start_stop) ||
+        is_button_pressed(buttons.left_player) ||
+        is_button_pressed(buttons.right_player))
+    {
+        state.start = !state.start;
+    }
+    else if (is_button_pressed(buttons.ok))
+    {
+        state.start = false;
+        state.game_end = false;
+        state.right_player_time = state.time_limit;
+    }
+
+    if (state.start && !state.game_end)
+    {
+        if (millis() - last_time > 100)
+        {
+            state.right_player_time--;
+
+            last_time = millis();
+        }
+
+        if (state.right_player_time == 0)
+        {
+            state.game_end = true;
+        }
+    }
+
+    if (is_button_pressed(buttons.soft_reset))
+    {
+        change_mode(mode_menu);
+        return;
+    }
+
+    if (state.show_deciseconds)
+    {
+        display_time_one(state.right_player_time, true);
+    }
+    else
+    {
+        display_time_one(state.right_player_time, false);
+    }
+}
+
 void mode_menu()
 {
     if (is_button_pressed(buttons.left_player))
@@ -291,6 +401,14 @@ void mode_menu()
                         setup_two_clock_down();
                         change_mode(mode_two_clock_down);
                         return;
+                    case GameMode::OneClockUp:
+                        setup_one_clock_up();
+                        change_mode(mode_one_clock_up);
+                        return;
+                    case GameMode::OneClockDown:
+                        setup_one_clock_down();
+                        change_mode(mode_one_clock_down);
+                        return;
                 }
         }
     }
@@ -318,10 +436,16 @@ void mode_modes()
         switch (state.game_mode)
         {
             case GameMode::TwoClockUp:
-                state.game_mode = GameMode::TwoClockDown;
+                state.game_mode = GameMode::OneClockDown;
                 break;
             case GameMode::TwoClockDown:
                 state.game_mode = GameMode::TwoClockUp;
+                break;
+            case GameMode::OneClockUp:
+                state.game_mode = GameMode::TwoClockDown;
+                break;
+            case GameMode::OneClockDown:
+                state.game_mode = GameMode::OneClockUp;
                 break;
         }
     }
@@ -333,6 +457,12 @@ void mode_modes()
                 state.game_mode = GameMode::TwoClockDown;
                 break;
             case GameMode::TwoClockDown:
+                state.game_mode = GameMode::OneClockUp;
+                break;
+            case GameMode::OneClockUp:
+                state.game_mode = GameMode::OneClockDown;
+                break;
+            case GameMode::OneClockDown:
                 state.game_mode = GameMode::TwoClockUp;
                 break;
         }
@@ -351,10 +481,18 @@ void mode_modes()
     {
         case GameMode::TwoClockUp:
             lcd.print("Two Clock ");
-            lcd.write((byte) UP_ARROW);  // TODO If you add more game modes, then this may write some additional spaces
+            lcd.write((byte) UP_ARROW);
             break;
         case GameMode::TwoClockDown:
             lcd.print("Two Clock ");
+            lcd.write((byte) DOWN_ARROW);
+            break;
+        case GameMode::OneClockUp:
+            lcd.print("One Clock ");
+            lcd.write((byte) UP_ARROW);
+            break;
+        case GameMode::OneClockDown:
+            lcd.print("One Clock ");
             lcd.write((byte) DOWN_ARROW);
             break;
     }
