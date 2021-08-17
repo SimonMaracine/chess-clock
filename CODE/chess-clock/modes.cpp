@@ -549,7 +549,11 @@ void mode_time()
     lcd.print("Set Time Limit:");
 
     lcd.setCursor(0, 1);
-    lcd.print(state.time_limit / ONE_MINUTE);
+    if(!state.set_time_in_seconds)
+        lcd.print(state.time_limit / ONE_MINUTE);
+    else
+        lcd.print(state.time_limit / ONE_SECOND);
+    
     lcd.print(" ");
 }
 
@@ -557,27 +561,27 @@ void mode_submenu_time()
 {
     if(is_button_pressed(buttons.left_player))
     {
-        state.set_time_in_seconds = !state.set_time_in_seconds;
-
-        if(!state.set_time_in_seconds)  /// Avoid setting both in seconds and minutes and confusing the time_limit
+        if(state.set_time_in_seconds == true)
         {
+            state.set_time_in_seconds = false;
             state.time_limit = THIRTY_MINUTES;
         }
         else
         {
+            state.set_time_in_seconds = true;
             state.time_limit = ONE_MINUTE;
         }
     }
-    else if(is_button_pressed(buttons.left_player))
+    else if(is_button_pressed(buttons.right_player))
     {
-        state.set_time_in_seconds = !state.set_time_in_seconds;
-
-        if(!state.set_time_in_seconds)  /// Avoid setting both in seconds and minutes and confusing the time_limit
+        if(state.set_time_in_seconds == true)
         {
+            state.set_time_in_seconds = false;
             state.time_limit = THIRTY_MINUTES;
         }
         else
         {
+            state.set_time_in_seconds = true;
             state.time_limit = ONE_MINUTE;
         }
     }
@@ -592,9 +596,9 @@ void mode_submenu_time()
     lcd.print("Set time in:");
     lcd.setCursor(0, 1);
     if(!state.set_time_in_seconds)
-        lcd.print("minutes ");
+        lcd.print("MINUTES ");
     else
-        lcd.print("seconds ");
+        lcd.print("SECONDS ");
 }
 
 void mode_deciseconds()
