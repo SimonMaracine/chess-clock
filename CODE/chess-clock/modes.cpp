@@ -11,6 +11,8 @@ void mode_two_clock_up();
 void mode_two_clock_down();
 void mode_one_clock_up();
 void mode_one_clock_down();
+void mode_dice();
+void mode_submenu_dice();
 void mode_menu();
 void mode_modes();
 void mode_time();
@@ -626,35 +628,34 @@ void mode_modes()
 
 void mode_time()
 {
-    if(!state.set_time_in_seconds)
+    if (!state.set_time_in_seconds)
     {
         if (buttons.left_player[0] && state.time_limit > ONE_MINUTE)
         {
             state.time_limit -= ONE_MINUTE;
             delay(200);
         }
-    
+
         if (buttons.right_player[0] && state.time_limit < NINETY_MINUTES)
         {
             state.time_limit += ONE_MINUTE;
             delay(200);
         }
     }
-    else   ///Set time in seconds (max three minutes)
+    else  // Set time in seconds (max three minutes)
     {
         if (buttons.left_player[0] && state.time_limit > ONE_SECOND)
         {
             state.time_limit -= ONE_SECOND;
             delay(200);
         }
-    
+
         if (buttons.right_player[0] && state.time_limit < THREE_MINUTES)
         {
             state.time_limit += ONE_SECOND;
             delay(200);
         }
     }
-    
 
     if (is_button_pressed(buttons.ok))
     {
@@ -666,56 +667,74 @@ void mode_time()
     lcd.print("Set Time Limit:");
 
     lcd.setCursor(0, 1);
-    if(!state.set_time_in_seconds)
-        lcd.print(state.time_limit / ONE_MINUTE);
-    else
+    if (state.set_time_in_seconds)
         lcd.print(state.time_limit / ONE_SECOND);
-    
+    else
+        lcd.print(state.time_limit / ONE_MINUTE);
+
     lcd.print(" ");
 }
 
 void mode_submenu_time()
 {
-    if(is_button_pressed(buttons.left_player))
+    bool chosen_seconds;
+    if (state.set_time_in_seconds)
     {
-        if(state.set_time_in_seconds == true)
-        {
-            state.set_time_in_seconds = false;
-            state.time_limit = THIRTY_MINUTES;
-        }
-        else
-        {
-            state.set_time_in_seconds = true;
-            state.time_limit = ONE_MINUTE;
-        }
+        chosen_seconds = true;
     }
-    else if(is_button_pressed(buttons.right_player))
+    else
     {
-        if(state.set_time_in_seconds == true)
+        chosen_seconds = false;
+    }
+
+    if (is_button_pressed(buttons.left_player) ||
+        is_button_pressed(buttons.right_player))
+    {
+        if (state.set_time_in_seconds)
         {
             state.set_time_in_seconds = false;
-            state.time_limit = THIRTY_MINUTES;
+            chosen_seconds = false;
         }
         else
         {
             state.set_time_in_seconds = true;
-            state.time_limit = ONE_MINUTE;
+            chosen_seconds = true;
         }
     }
 
     if (is_button_pressed(buttons.ok))
     {
+        if (chosen_seconds)
+        {
+            if (state.last_time_mode == TimeMode::Minutes)
+            {
+                state.time_limit = ONE_MINUTE;
+            }
+
+            state.last_time_mode = TimeMode::Seconds;
+        }
+        else
+        {
+            if (state.last_time_mode == TimeMode::Seconds)
+            {
+                state.time_limit = THIRTY_MINUTES;
+            }
+
+            state.last_time_mode = TimeMode::Minutes;
+        }
+        
         change_mode(mode_time);
         return;
     }
 
     lcd.setCursor(0, 0);
     lcd.print("Set time in:");
+    
     lcd.setCursor(0, 1);
-    if(!state.set_time_in_seconds)
-        lcd.print("MINUTES ");
+    if (state.set_time_in_seconds)
+        lcd.print("Seconds");
     else
-        lcd.print("SECONDS ");
+        lcd.print("Minutes");
 }
 
 void mode_deciseconds()

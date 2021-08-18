@@ -44,6 +44,11 @@ enum class GameMode
     Dice
 };
 
+enum class TimeMode
+{
+    Minutes, Seconds  
+};
+
 struct Buttons
 {
     // First - is currently pressed; second - was previously pressed
@@ -66,7 +71,8 @@ struct GameState
     bool start = false;
     bool game_end = false;
 
-    bool set_time_in_seconds;
+    bool set_time_in_seconds = false;
+    TimeMode last_time_mode = TimeMode::Minutes;
 
     unsigned long time_limit = THIRTY_MINUTES;  // In deciseconds
     bool show_deciseconds = false;
