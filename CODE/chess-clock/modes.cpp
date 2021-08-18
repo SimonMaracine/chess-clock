@@ -61,6 +61,11 @@ void setup_one_clock_down()
     state.game_end = false;
 }
 
+void setup_dice()
+{
+    randomSeed(micros() / 4);
+}
+
 void mode_startup()
 {
     if (buttons.left_player[0] || buttons.right_player[0] ||
@@ -356,6 +361,105 @@ void mode_one_clock_down()
     display_progress_bar(state.right_player_time, state.time_limit, Monotony::Descend);
 }
 
+void mode_dice()
+{
+    short dice[2];
+    if(is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
+    {
+        for(byte i = 0; i < 2; i++)
+        {
+            dice[i] = random();
+        }
+
+        for(short k = 0; k < 19; k++)
+        {
+            lcd.clear();
+
+            if(k == 0)
+            {
+                lcd.setCursor(0, 0);
+                lcd.print((char)DEGREE_SIGN);
+                lcd.setCursor(0, 1);
+                lcd.print((char)DEGREE_SIGN);
+            }
+            else if(k == 1)
+            {
+                lcd.setCursor(0, 0);
+                lcd.print('0');
+                lcd.print((char)DEGREE_SIGN);
+                lcd.setCursor(0, 1);
+                lcd.print('0');
+                lcd.print((char)DEGREE_SIGN);
+            }
+            else if(k == 2)
+            {
+                lcd.setCursor(0, 0);
+                lcd.print((char)DEGREE_SIGN);
+                lcd.print('0');
+                lcd.print((char)DEGREE_SIGN);
+                lcd.setCursor(0, 1);
+                lcd.print((char)DEGREE_SIGN);
+                lcd.print('0');
+                lcd.print((char)DEGREE_SIGN);
+            }
+            else
+            {
+                lcd.scrollDisplayRight();
+            }
+
+            delay(50);
+        }
+    }
+
+    lcd.setCursor(0, 0);
+    lcd.print("***");
+    lcd.setCursor(0, 1);
+    lcd.print("***");
+    lcd.setCursor(13, 0);
+    lcd.print("***");
+    lcd.setCursor(13, 1);
+    lcd.print("***");
+
+    switch(state.dice_number)
+    {
+        case 1:
+            lcd.setCursor(7, 0);
+            lcd.print(dice[0]);
+            break;
+        case 2:
+            lcd.setCursor(7, 0);
+            lcd.print(dice[0]);
+            lcd.setCursor(7, 1);
+            lcd.print(dice[1]);
+            break;
+    }
+            
+}
+
+void mode_submenu_dice()
+{
+    if(is_button_pressed(buttons.left_player))
+    {
+        if(state.dice_number > 1)
+            state.dice_number --;
+    }
+    if(is_button_pressed(buttons.right_player))
+    {
+        if(state.dice_number < 2)
+            state.dice_number ++;
+    }
+    if(is_button_pressed(buttons.ok))
+    {
+        change_mode(mode_dice);
+    }
+
+    lcd.setCursor(0, 0);
+    lcd.print("How many dice:");
+    lcd.setCursor(0, 1);
+    lcd.print(state.dice_number);
+    lcd.print("   ");
+}
+
 void mode_menu()
 {
     if (is_button_pressed(buttons.left_player))
@@ -418,6 +522,10 @@ void mode_menu()
                         setup_one_clock_down();
                         change_mode(mode_one_clock_down);
                         return;
+                    case GameMode::Dice:
+                        setup_dice();
+                        change_mode(mode_dice);
+                        return;
                 }
         }
     }
@@ -445,7 +553,7 @@ void mode_modes()
         switch (state.game_mode)
         {
             case GameMode::TwoClockUp:
-                state.game_mode = GameMode::OneClockDown;
+                state.game_mode = GameMode::Dice;
                 break;
             case GameMode::TwoClockDown:
                 state.game_mode = GameMode::TwoClockUp;
@@ -455,6 +563,9 @@ void mode_modes()
                 break;
             case GameMode::OneClockDown:
                 state.game_mode = GameMode::OneClockUp;
+                break;
+            case GameMode::Dice:
+                state.game_mode = GameMode::OneClockDown;
                 break;
         }
     }
@@ -472,6 +583,9 @@ void mode_modes()
                 state.game_mode = GameMode::OneClockDown;
                 break;
             case GameMode::OneClockDown:
+                state.game_mode = GameMode::Dice;
+                break;
+            case GameMode::Dice:
                 state.game_mode = GameMode::TwoClockUp;
                 break;
         }
@@ -503,6 +617,9 @@ void mode_modes()
         case GameMode::OneClockDown:
             lcd.print("One Clock ");
             lcd.write((byte) DOWN_ARROW);
+            break;
+        case GameMode::Dice:
+            lcd.print("Dice       ");
             break;
     }
 }

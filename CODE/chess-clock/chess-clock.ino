@@ -31,6 +31,9 @@ void setup()
 
     ///Set initial time setup in minutes
     state.set_time_in_seconds = false;
+
+    ///Set initial number of dice to 1
+    state.dice_number = 1;
 }
 
 void loop()

@@ -20,6 +20,8 @@
 #define ONE_MINUTE 600 
 #define ONE_SECOND 10
 
+#define DEGREE_SIGN 176
+
 enum class Player
 {
     Left, Right
@@ -38,7 +40,8 @@ enum class GameMode
     TwoClockUp,
     TwoClockDown,
     OneClockUp,
-    OneClockDown
+    OneClockDown,
+    Dice
 };
 
 struct Buttons
@@ -67,6 +70,8 @@ struct GameState
 
     unsigned long time_limit = THIRTY_MINUTES;  // In deciseconds
     bool show_deciseconds = false;
+
+    short dice_number;
 
     Menu current_menu = Menu::Mode;
     GameMode game_mode = GameMode::TwoClockUp;
