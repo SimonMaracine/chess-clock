@@ -66,6 +66,8 @@ void setup_one_clock_down()
 void setup_dice()
 {
     randomSeed(micros() / 4);
+    state.dice[0] = 0;
+    state.dice[1] = 0;
 }
 
 void mode_startup()
@@ -365,12 +367,11 @@ void mode_one_clock_down()
 
 void mode_dice()
 {
-    short dice[2];
     if(is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
     {
         for(byte i = 0; i < 2; i++)
         {
-            dice[i] = random();
+            state.dice[i] = random(1, 6);
         }
 
         for(short k = 0; k < 19; k++)
@@ -413,29 +414,43 @@ void mode_dice()
         }
     }
 
-    lcd.setCursor(0, 0);
-    lcd.print("***");
-    lcd.setCursor(0, 1);
-    lcd.print("***");
-    lcd.setCursor(13, 0);
-    lcd.print("***");
-    lcd.setCursor(13, 1);
-    lcd.print("***");
-
-    switch(state.dice_number)
+    if(is_button_pressed(buttons.soft_reset))
     {
-        case 1:
-            lcd.setCursor(7, 0);
-            lcd.print(dice[0]);
-            break;
-        case 2:
-            lcd.setCursor(7, 0);
-            lcd.print(dice[0]);
-            lcd.setCursor(7, 1);
-            lcd.print(dice[1]);
-            break;
+        change_mode(mode_menu);
+        return;
     }
-            
+
+    if(state.dice[0])
+    {
+        lcd.setCursor(0, 0);
+        lcd.print("***");
+        lcd.setCursor(0, 1);
+        lcd.print("***");
+        lcd.setCursor(13, 0);
+        lcd.print("***");
+        lcd.setCursor(13, 1);
+        lcd.print("***");
+    
+        switch(state.dice_number)
+        {
+            case 1:
+                lcd.setCursor(7, 0);
+                lcd.print(state.dice[0]);
+                break;
+            case 2:
+                lcd.setCursor(7, 0);
+                lcd.print(state.dice[0]);
+                lcd.setCursor(7, 1);
+                lcd.print(state.dice[1]);
+                break;
+        }
+    }
+    else
+    {
+        lcd.clear();
+        lcd.setCursor(1, 0);
+        lcd.print("Roll the dice!");
+    }
 }
 
 void mode_submenu_dice()

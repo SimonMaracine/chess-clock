@@ -78,6 +78,7 @@ struct GameState
     bool show_deciseconds = false;
 
     short dice_number;
+    short dice[2];
 
     Menu current_menu = Menu::Mode;
     GameMode game_mode = GameMode::TwoClockUp;
