@@ -610,7 +610,7 @@ void mode_modes()
     {
         if(state.game_mode == GameMode::Dice)
         {
-            mode_submenu_dice();
+            change_mode(mode_submenu_dice);
             return;
         }
 
