@@ -371,7 +371,7 @@ void mode_dice()
     {
         for(byte i = 0; i < 2; i++)
         {
-            state.dice[i] = random(1, 6);
+            state.dice[i] = random(1, 7);
         }
 
         for(short k = 0; k < 19; k++)
@@ -466,6 +466,7 @@ void mode_submenu_dice()
     if(is_button_pressed(buttons.ok))
     {
         change_mode(mode_menu);
+        return;
     }
 
     lcd.setCursor(0, 0);
