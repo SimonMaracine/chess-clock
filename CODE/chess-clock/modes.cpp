@@ -453,17 +453,31 @@ void mode_dice()
 
 void mode_submenu_dice()
 {
+//    if(is_button_pressed(buttons.left_player))
+//    {
+//        if(state.dice_number > 1)
+//            state.dice_number --;
+//    }
+//    if(is_button_pressed(buttons.right_player))
+//    {
+//        if(state.dice_number < 2)
+//            state.dice_number ++;
+//    }
     if(is_button_pressed(buttons.left_player))
     {
-        if(state.dice_number > 1)
-            state.dice_number --;
+        if(state.dice_number == 1)
+            state.dice_number = 2;
+        else
+            state.dice_number = 1;
     }
-    if(is_button_pressed(buttons.right_player))
+    else if(is_button_pressed(buttons.right_player))
     {
-        if(state.dice_number < 2)
-            state.dice_number ++;
+        if(state.dice_number == 1)
+            state.dice_number = 2;
+        else
+            state.dice_number = 1;
     }
-    if(is_button_pressed(buttons.ok))
+    else if(is_button_pressed(buttons.ok))
     {
         change_mode(mode_menu);
         return;
