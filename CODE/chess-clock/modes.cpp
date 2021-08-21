@@ -376,8 +376,6 @@ void mode_dice()
 
         for(short k = 0; k < 19; k++)
         {
-            lcd.clear();
-
             if(k == 0)
             {
                 lcd.setCursor(0, 0);
@@ -410,6 +408,7 @@ void mode_dice()
                 lcd.scrollDisplayRight();
             }
 
+            lcd.clear();
             delay(50);
         }
     }
@@ -447,7 +446,6 @@ void mode_dice()
     }
     else
     {
-        lcd.clear();
         lcd.setCursor(1, 0);
         lcd.print("Roll the dice!");
     }
