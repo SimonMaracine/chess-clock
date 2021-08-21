@@ -465,7 +465,7 @@ void mode_submenu_dice()
     }
     if(is_button_pressed(buttons.ok))
     {
-        change_mode(mode_dice);
+        change_mode(mode_menu);
     }
 
     lcd.setCursor(0, 0);
@@ -607,6 +607,12 @@ void mode_modes()
     }
     else if (is_button_pressed(buttons.ok))
     {
+        if(state.game_mode == GameMode::Dice)
+        {
+            mode_submenu_dice();
+            return;
+        }
+
         change_mode(mode_menu);
         return;
     }
