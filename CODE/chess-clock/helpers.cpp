@@ -119,8 +119,15 @@ void display_progress_bar(unsigned long time, unsigned long time_limit, Monotony
     }
 
     lcd.setCursor(0, 0);
-    for (int i = 0; i < cells_filled; i++)
+    for (int i = 0; i < NUM_CELLS; i++)
     {
-        lcd.write((byte) FILLED_RECTANGLE);
+        if( i < cells_filled)
+        {
+            lcd.write((byte) FILLED_RECTANGLE);
+        }
+        else
+        {
+            lcd.print(" ");
+        }
     }
 }

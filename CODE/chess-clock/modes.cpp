@@ -127,52 +127,86 @@ void mode_two_clock_up()
         return;
     }
 
-    // Left player indicator
-    lcd.setCursor(0, 0);
-    lcd.write((byte) EMPTY_RECTANGLE);
-
-    // Right player indicator
-    lcd.setCursor(15, 0);
-    lcd.write((byte) FILLED_RECTANGLE);
-
-    // Middle seperator
-    lcd.setCursor(7, 0);
-    lcd.write((byte) RIGHT_PIPE);
-    lcd.setCursor(7, 1);
-    lcd.write((byte) RIGHT_PIPE);
-
-    lcd.setCursor(8, 0);
-    lcd.write((byte) LEFT_PIPE);
-    lcd.setCursor(8, 1);
-    lcd.write((byte) LEFT_PIPE);
-
-    if (state.player == Player::Left)
+    if(!state.start)  ///PAUSE
     {
-        lcd.setCursor(12, 0);
-        lcd.print(' ');
+        lcd.setCursor(0, 0);
+        lcd.print("     ");
+        lcd.print("PAUSE!");
+        lcd.print("     ");
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
+    }
+    else if(state.game_end)   ///TIME END
+    {
+        lcd.setCursor(0, 0);
+        lcd.print("  ");
+        lcd.print("!TIME ENDED!");
+        lcd.print("  ");
+        lcd.setCursor(0, 1);
+        ///lcd.print("                ");
 
-        lcd.setCursor(3, 0);
-        lcd.write((byte) TURN_INDICATOR);
+        ///ADD MORE STUFF (like buzzer)
     }
     else
     {
+        ///selective clearing of screen to avoid flicker
+        lcd.setCursor(1, 0);
+        lcd.print("  ");
+        lcd.setCursor(4, 0);
+        lcd.print("   ");
+        lcd.setCursor(9, 0);
+        lcd.print("  ");
+        lcd.setCursor(13, 0);
+        lcd.print("   ");
+        
+        // Left player indicator
+        lcd.setCursor(0, 0);
+        lcd.write((byte) EMPTY_RECTANGLE);
+        
+    
+        // Right player indicator
+        lcd.setCursor(15, 0);
+        lcd.write((byte) FILLED_RECTANGLE);
+    
+        // Middle seperator
+        lcd.setCursor(7, 0);
+        lcd.write((byte) RIGHT_PIPE);
+        lcd.setCursor(7, 1);
+        lcd.write((byte) RIGHT_PIPE);
+    
+        lcd.setCursor(8, 0);
+        lcd.write((byte) LEFT_PIPE);
+        lcd.setCursor(8, 1);
+        lcd.write((byte) LEFT_PIPE);
+    
+        if (state.player == Player::Left)
+        {
+            lcd.setCursor(12, 0);
+            lcd.print(' ');
+    
+            lcd.setCursor(3, 0);
+            lcd.write((byte) TURN_INDICATOR);
+        }
+        else
+        {
         lcd.setCursor(3, 0);
         lcd.print(' ');
-
+    
         lcd.setCursor(12, 0);
         lcd.write((byte) TURN_INDICATOR);
-    }
-
-    // Player times
-    if (state.show_deciseconds)
-    {
-        display_time(state.left_player_time, Player::Left, true);
-        display_time(state.right_player_time, Player::Right, true);
-    }
-    else
-    {
-        display_time(state.left_player_time, Player::Left, false);
-        display_time(state.right_player_time, Player::Right, false);
+        }
+    
+        // Player times
+        if (state.show_deciseconds)
+        {
+            display_time(state.left_player_time, Player::Left, true);
+            display_time(state.right_player_time, Player::Right, true);
+        }
+        else
+        {
+            display_time(state.left_player_time, Player::Left, false);
+            display_time(state.right_player_time, Player::Right, false);
+        }
     }
 }
 
@@ -216,52 +250,75 @@ void mode_two_clock_down()
         return;
     }
 
-    // Left player indicator
-    lcd.setCursor(0, 0);
-    lcd.write((byte) EMPTY_RECTANGLE);
-
-    // Right player indicator
-    lcd.setCursor(15, 0);
-    lcd.write((byte) FILLED_RECTANGLE);
-
-    // Middle seperator
-    lcd.setCursor(7, 0);
-    lcd.write((byte) RIGHT_PIPE);
-    lcd.setCursor(7, 1);
-    lcd.write((byte) RIGHT_PIPE);
-
-    lcd.setCursor(8, 0);
-    lcd.write((byte) LEFT_PIPE);
-    lcd.setCursor(8, 1);
-    lcd.write((byte) LEFT_PIPE);
-
-    if (state.player == Player::Left)
+    if(!state.start)  ///PAUSE
     {
-        lcd.setCursor(12, 0);
-        lcd.print(' ');
+        lcd.setCursor(0, 0);
+        lcd.print("     ");
+        lcd.print("PAUSE!");
+        lcd.print("     ");
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
+    }
+    else if(state.game_end)   ///TIME END
+    {
+        lcd.setCursor(0, 0);
+        lcd.print("  ");
+        lcd.print("!TIME ENDED!");
+        lcd.print("  ");
+        lcd.setCursor(0, 1);
+        ///lcd.print("                ");
 
-        lcd.setCursor(3, 0);
-        lcd.write((byte) TURN_INDICATOR);
+        ///ADD MORE STUFF (like buzzer)
     }
     else
     {
-        lcd.setCursor(3, 0);
-        lcd.print(' ');
-
-        lcd.setCursor(12, 0);
-        lcd.write((byte) TURN_INDICATOR);
-    }
-
-    // Player times
-    if (state.show_deciseconds)
-    {
-        display_time(state.left_player_time, Player::Left, true);
-        display_time(state.right_player_time, Player::Right, true);
-    }
-    else
-    {
-        display_time(state.left_player_time, Player::Left, false);
-        display_time(state.right_player_time, Player::Right, false);
+        // Left player indicator
+        lcd.setCursor(0, 0);
+        lcd.write((byte) EMPTY_RECTANGLE);
+    
+        // Right player indicator
+        lcd.setCursor(15, 0);
+        lcd.write((byte) FILLED_RECTANGLE);
+    
+        // Middle seperator
+        lcd.setCursor(7, 0);
+        lcd.write((byte) RIGHT_PIPE);
+        lcd.setCursor(7, 1);
+        lcd.write((byte) RIGHT_PIPE);
+    
+        lcd.setCursor(8, 0);
+        lcd.write((byte) LEFT_PIPE);
+        lcd.setCursor(8, 1);
+        lcd.write((byte) LEFT_PIPE);
+    
+        if (state.player == Player::Left)
+        {
+            lcd.setCursor(12, 0);
+            lcd.print(' ');
+    
+            lcd.setCursor(3, 0);
+            lcd.write((byte) TURN_INDICATOR);
+        }
+        else
+        {
+            lcd.setCursor(3, 0);
+            lcd.print(' ');
+    
+            lcd.setCursor(12, 0);
+            lcd.write((byte) TURN_INDICATOR);
+        }
+    
+        // Player times
+        if (state.show_deciseconds)
+        {
+            display_time(state.left_player_time, Player::Left, true);
+            display_time(state.right_player_time, Player::Right, true);
+        }
+        else
+        {
+            display_time(state.left_player_time, Player::Left, false);
+            display_time(state.right_player_time, Player::Right, false);
+        }
     }
 }
 
@@ -303,16 +360,43 @@ void mode_one_clock_up()
         return;
     }
 
-    if (state.show_deciseconds)
+    if(!state.start)  ///PAUSE
     {
-        display_time_one(state.right_player_time, true);
+        lcd.setCursor(0, 0);
+        lcd.print("     ");
+        lcd.print("PAUSE!");
+        lcd.print("     ");
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
+    }
+    else if(state.game_end)   ///TIME END
+    {
+        lcd.setCursor(0, 0);
+        lcd.print("  ");
+        lcd.print("!TIME ENDED!");
+        lcd.print("  ");
+        lcd.setCursor(0, 1);
+        ///lcd.print("                ");
+
+        ///ADD MORE STUFF (like buzzer)
     }
     else
     {
-        display_time_one(state.right_player_time, false);
+        if (state.show_deciseconds)
+        {
+            display_time_one(state.right_player_time, true);
+        }
+        else
+        {
+            display_time_one(state.right_player_time, false);
+        }
+
+        ///clear 
+    
+        display_progress_bar(state.right_player_time, state.time_limit, Monotony::Ascend);
     }
 
-    display_progress_bar(state.right_player_time, state.time_limit, Monotony::Ascend);
+    
 }
 
 void mode_one_clock_down()
@@ -353,16 +437,39 @@ void mode_one_clock_down()
         return;
     }
 
-    if (state.show_deciseconds)
+    if(!state.start)  ///PAUSE
     {
-        display_time_one(state.right_player_time, true);
+        lcd.setCursor(0, 0);
+        lcd.print("     ");
+        lcd.print("PAUSE!");
+        lcd.print("     ");
+        lcd.setCursor(0, 1);
+        lcd.print("                ");
+    }
+    else if(state.game_end)   ///TIME END
+    {
+        lcd.setCursor(0, 0);
+        lcd.print("  ");
+        lcd.print("!TIME ENDED!");
+        lcd.print("  ");
+        lcd.setCursor(0, 1);
+        ///lcd.print("                ");
+
+        ///ADD MORE STUFF (like buzzer)
     }
     else
     {
-        display_time_one(state.right_player_time, false);
+        if (state.show_deciseconds)
+        {
+            display_time_one(state.right_player_time, true);
+        }
+        else
+        {
+            display_time_one(state.right_player_time, false);
+        }
+    
+        display_progress_bar(state.right_player_time, state.time_limit, Monotony::Descend);
     }
-
-    display_progress_bar(state.right_player_time, state.time_limit, Monotony::Descend);
 }
 
 void mode_dice()
