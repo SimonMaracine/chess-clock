@@ -129,21 +129,13 @@ void mode_two_clock_up()
 
     if(!state.start)  ///PAUSE
     {
-        lcd.setCursor(0, 0);
-        lcd.print("     ");
-        lcd.print("PAUSE!");
-        lcd.print("     ");
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
+        lcd.setCursor(5, 0);
+        lcd.print('P');
     }
     else if(state.game_end)   ///TIME END
     {
-        lcd.setCursor(0, 0);
-        lcd.print("  ");
-        lcd.print("!TIME ENDED!");
-        lcd.print("  ");
-        lcd.setCursor(0, 1);
-        ///lcd.print("                ");
+        lcd.setCursor(5, 0);
+        lcd.print('G');
 
         ///ADD MORE STUFF (like buzzer)
     }
@@ -252,21 +244,13 @@ void mode_two_clock_down()
 
     if(!state.start)  ///PAUSE
     {
-        lcd.setCursor(0, 0);
-        lcd.print("     ");
-        lcd.print("PAUSE!");
-        lcd.print("     ");
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
+        lcd.setCursor(5, 0);
+        lcd.print('P');
     }
     else if(state.game_end)   ///TIME END
     {
-        lcd.setCursor(0, 0);
-        lcd.print("  ");
-        lcd.print("!TIME ENDED!");
-        lcd.print("  ");
-        lcd.setCursor(0, 1);
-        ///lcd.print("                ");
+        lcd.setCursor(5, 0);
+        lcd.print('G');
 
         ///ADD MORE STUFF (like buzzer)
     }
@@ -362,21 +346,13 @@ void mode_one_clock_up()
 
     if(!state.start)  ///PAUSE
     {
-        lcd.setCursor(0, 0);
-        lcd.print("     ");
-        lcd.print("PAUSE!");
-        lcd.print("     ");
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
+        lcd.setCursor(2, 0);
+        lcd.print("P");
     }
     else if(state.game_end)   ///TIME END
     {
-        lcd.setCursor(0, 0);
-        lcd.print("  ");
-        lcd.print("!TIME ENDED!");
-        lcd.print("  ");
-        lcd.setCursor(0, 1);
-        ///lcd.print("                ");
+        lcd.setCursor(2, 0);
+        lcd.print("G");
 
         ///ADD MORE STUFF (like buzzer)
     }
@@ -392,6 +368,8 @@ void mode_one_clock_up()
         }
 
         ///clear 
+        lcd.setCursor(2, 0);
+        lcd.print(" ");
     
         display_progress_bar(state.right_player_time, state.time_limit, Monotony::Ascend);
     }
@@ -439,21 +417,14 @@ void mode_one_clock_down()
 
     if(!state.start)  ///PAUSE
     {
-        lcd.setCursor(0, 0);
-        lcd.print("     ");
-        lcd.print("PAUSE!");
-        lcd.print("     ");
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
+        lcd.setCursor(2, 0);
+        lcd.print('P');
     }
     else if(state.game_end)   ///TIME END
     {
         lcd.setCursor(0, 0);
         lcd.print("  ");
-        lcd.print("!TIME ENDED!");
-        lcd.print("  ");
-        lcd.setCursor(0, 1);
-        ///lcd.print("                ");
+        lcd.print('G');
 
         ///ADD MORE STUFF (like buzzer)
     }
@@ -467,6 +438,10 @@ void mode_one_clock_down()
         {
             display_time_one(state.right_player_time, false);
         }
+
+        ///clear
+        lcd.setCursor(2, 0);
+        lcd.print(" ");
     
         display_progress_bar(state.right_player_time, state.time_limit, Monotony::Descend);
     }
