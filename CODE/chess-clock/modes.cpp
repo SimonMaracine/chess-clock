@@ -457,41 +457,32 @@ void mode_dice()
             state.dice[i] = random(1, 7);
         }
 
-        for(short k = 0; k < 19; k++)
+        for(short k = 0; k < 17; k++)
         {
-            if(k == 0)
+            if(k != 16)
             {
-                lcd.setCursor(0, 0);
-                lcd.print((char)DEGREE_SIGN);
-                lcd.setCursor(0, 1);
-                lcd.print((char)DEGREE_SIGN);
-            }
-            else if(k == 1)
-            {
-                lcd.setCursor(0, 0);
-                lcd.print('0');
-                lcd.print((char)DEGREE_SIGN);
-                lcd.setCursor(0, 1);
-                lcd.print('0');
-                lcd.print((char)DEGREE_SIGN);
-            }
-            else if(k == 2)
-            {
-                lcd.setCursor(0, 0);
-                lcd.print((char)DEGREE_SIGN);
-                lcd.print('0');
-                lcd.print((char)DEGREE_SIGN);
-                lcd.setCursor(0, 1);
-                lcd.print((char)DEGREE_SIGN);
-                lcd.print('0');
-                lcd.print((char)DEGREE_SIGN);
-            }
-            else
-            {
-                lcd.scrollDisplayRight();
+                lcd.setCursor(k, 0);
+                lcd.print("*");
+                lcd.setCursor(k, 1);
+                lcd.print("*");
             }
 
-            lcd.clear();
+            if(k - 1 >= 0)
+            {
+                lcd.setCursor(k - 1, 0);
+                lcd.print(" ");
+                lcd.setCursor(k - 1, 1);
+                lcd.print(" ");
+            }
+
+            if(k == 16)
+            {
+                lcd.setCursor(15, 0);
+                lcd.print(" ");
+                lcd.setCursor(15, 1);
+                lcd.print(" ");
+            }
+
             delay(50);
         }
     }
