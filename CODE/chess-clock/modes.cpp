@@ -319,7 +319,7 @@ void mode_two_clock_down()
     }
 }
 
-void mode_one_clock_up()  // TODO softer reset
+void mode_one_clock_up()
 {
     if (is_button_pressed(buttons.start_stop))
     {
@@ -391,7 +391,7 @@ void mode_one_clock_up()  // TODO softer reset
     }
 }
 
-void mode_one_clock_down()  // TODO softer reset
+void mode_one_clock_down()
 {
     if (is_button_pressed(buttons.start_stop))
     {
