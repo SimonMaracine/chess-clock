@@ -8,6 +8,10 @@
 extern LiquidCrystal lcd;
 extern mode_func current_mode;
 
+const char* ANIMATION[8] = {
+    "<", ">", "<", ">", "<", ">", "<", ">"
+};
+
 void display_time(unsigned long player_time, Player player, bool show_deciseconds)
 {
     const char ASCII_ZERO = '0';

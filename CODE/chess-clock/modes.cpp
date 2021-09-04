@@ -76,8 +76,7 @@ void mode_startup()
         buttons.start_stop[0] || buttons.soft_reset[0] ||
         buttons.ok[0])
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
     lcd.setCursor(0, 0);
@@ -123,8 +122,7 @@ void mode_two_clock_up()
 
     if (is_button_pressed(buttons.soft_reset))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
     if(!state.start)  ///PAUSE
@@ -239,8 +237,7 @@ void mode_two_clock_down()
 
     if (is_button_pressed(buttons.soft_reset))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
     if(!state.start)  ///PAUSE
@@ -342,11 +339,10 @@ void mode_one_clock_up()
 
     if (is_button_pressed(buttons.soft_reset))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
-    if(!state.start)  ///PAUSE
+    if (!state.start)  ///PAUSE
     {
         lcd.setCursor(2, 1);
         lcd.print('P');
@@ -357,7 +353,7 @@ void mode_one_clock_up()
         lcd.print(" ");
     }
     
-    if(state.game_end)   ///TIME END
+    if (state.game_end)   ///TIME END
     {
         ///ADD MORE STUFF (like buzzer)
     }
@@ -412,11 +408,10 @@ void mode_one_clock_down()
 
     if (is_button_pressed(buttons.soft_reset))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
-    if(!state.start)  ///PAUSE
+    if (!state.start)  ///PAUSE
     {
         lcd.setCursor(2, 1);
         lcd.print('P');
@@ -427,7 +422,7 @@ void mode_one_clock_down()
         lcd.print(" ");
     }
     
-    if(state.game_end)   ///TIME END
+    if (state.game_end)   ///TIME END
     {
         ///ADD MORE STUFF (like buzzer)
     }
@@ -450,50 +445,28 @@ void mode_one_clock_down()
 
 void mode_dice()
 {
-    if(is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
+    if (is_button_pressed(buttons.left_player) || is_button_pressed(buttons.right_player))
     {
-        for(byte i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++)
         {
             state.dice[i] = random(1, 7);
         }
 
-        for(short k = 0; k < 17; k++)
+        for (int i = 0; i < 8; i++)
         {
-            if(k != 16)
-            {
-                lcd.setCursor(k, 0);
-                lcd.print("*");
-                lcd.setCursor(k, 1);
-                lcd.print("*");
-            }
-
-            if(k - 1 >= 0)
-            {
-                lcd.setCursor(k - 1, 0);
-                lcd.print(" ");
-                lcd.setCursor(k - 1, 1);
-                lcd.print(" ");
-            }
-
-            if(k == 16)
-            {
-                lcd.setCursor(15, 0);
-                lcd.print(" ");
-                lcd.setCursor(15, 1);
-                lcd.print(" ");
-            }
-
-            delay(50);
+            lcd.clear();
+            lcd.setCursor(7, 0);
+            lcd.print(ANIMATION[i]);
+            delay(300);
         }
     }
 
-    if(is_button_pressed(buttons.soft_reset))
+    if (is_button_pressed(buttons.soft_reset))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
-    if(state.dice[0])
+    if (state.dice[0])
     {
         lcd.setCursor(0, 0);
         lcd.print("***");
@@ -504,7 +477,7 @@ void mode_dice()
         lcd.setCursor(13, 1);
         lcd.print("***");
     
-        switch(state.dice_number)
+        switch (state.dice_number)
         {
             case 1:
                 lcd.setCursor(7, 0);
@@ -527,34 +500,23 @@ void mode_dice()
 
 void mode_submenu_dice()
 {
-//    if(is_button_pressed(buttons.left_player))
-//    {
-//        if(state.dice_number > 1)
-//            state.dice_number --;
-//    }
-//    if(is_button_pressed(buttons.right_player))
-//    {
-//        if(state.dice_number < 2)
-//            state.dice_number ++;
-//    }
-    if(is_button_pressed(buttons.left_player))
+    if (is_button_pressed(buttons.left_player))
     {
-        if(state.dice_number == 1)
+        if (state.dice_number == 1)
             state.dice_number = 2;
         else
             state.dice_number = 1;
     }
-    else if(is_button_pressed(buttons.right_player))
+    else if (is_button_pressed(buttons.right_player))
     {
-        if(state.dice_number == 1)
+        if (state.dice_number == 1)
             state.dice_number = 2;
         else
             state.dice_number = 1;
     }
-    else if(is_button_pressed(buttons.ok))
+    else if (is_button_pressed(buttons.ok))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
     lcd.setCursor(0, 0);
@@ -599,37 +561,29 @@ void mode_menu()
         switch (state.current_menu)
         {
             case Menu::Mode:
-                change_mode(mode_modes);
-                return;
+                CHANGE_MODE(mode_modes)
             case Menu::Time:
-                change_mode(mode_submenu_time);
-                return;
+                CHANGE_MODE(mode_submenu_time)
             case Menu::Deciseconds:
-                change_mode(mode_deciseconds);
-                return;
+                CHANGE_MODE(mode_deciseconds)
             case Menu::Start:
                 switch (state.game_mode)
                 {
                     case GameMode::TwoClockUp:
                         setup_two_clock_up();
-                        change_mode(mode_two_clock_up);
-                        return;
+                        CHANGE_MODE(mode_two_clock_up)
                     case GameMode::TwoClockDown:
                         setup_two_clock_down();
-                        change_mode(mode_two_clock_down);
-                        return;
+                        CHANGE_MODE(mode_two_clock_down)
                     case GameMode::OneClockUp:
                         setup_one_clock_up();
-                        change_mode(mode_one_clock_up);
-                        return;
+                        CHANGE_MODE(mode_one_clock_up)
                     case GameMode::OneClockDown:
                         setup_one_clock_down();
-                        change_mode(mode_one_clock_down);
-                        return;
+                        CHANGE_MODE(mode_one_clock_down)
                     case GameMode::Dice:
                         setup_dice();
-                        change_mode(mode_dice);
-                        return;
+                        CHANGE_MODE(mode_dice)
                 }
         }
     }
@@ -696,14 +650,12 @@ void mode_modes()
     }
     else if (is_button_pressed(buttons.ok))
     {
-        if(state.game_mode == GameMode::Dice)
+        if (state.game_mode == GameMode::Dice)
         {
-            change_mode(mode_submenu_dice);
-            return;
+            CHANGE_MODE(mode_submenu_dice)
         }
 
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
     lcd.setCursor(0, 0);
@@ -767,8 +719,7 @@ void mode_time()
 
     if (is_button_pressed(buttons.ok))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
 
     lcd.setCursor(0, 0);
@@ -830,9 +781,8 @@ void mode_submenu_time()
 
             state.last_time_mode = TimeMode::Minutes;
         }
-        
-        change_mode(mode_time);
-        return;
+
+        CHANGE_MODE(mode_time)
     }
 
     lcd.setCursor(0, 0);
@@ -857,8 +807,7 @@ void mode_deciseconds()
     }
     else if (is_button_pressed(buttons.ok))
     {
-        change_mode(mode_menu);
-        return;
+        CHANGE_MODE(mode_menu)
     }
     
     lcd.setCursor(0, 0);

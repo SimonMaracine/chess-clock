@@ -3,9 +3,15 @@
 
 #include "definitions.h"
 
+#define CHANGE_MODE(mode) \
+    change_mode(mode); \
+    return;
+
 enum class Monotony {
     Ascend, Descend
 };
+
+extern const char* ANIMATION[8];
 
 void display_time(unsigned long player_time, Player player, bool show_deciseconds);
 bool is_button_pressed(bool* button);
