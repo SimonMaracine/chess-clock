@@ -34,6 +34,7 @@ void setup_two_clock_up()
 
     state.start = false;
     state.game_end = false;
+    state.make_sound = true;
 }
 
 void setup_two_clock_down()
@@ -45,6 +46,7 @@ void setup_two_clock_down()
 
     state.start = false;
     state.game_end = false;
+    state.make_sound = true;
 }
 
 void setup_one_clock_up()
@@ -53,6 +55,7 @@ void setup_one_clock_up()
 
     state.start = false;
     state.game_end = false;
+    state.make_sound = true;
 }
 
 void setup_one_clock_down()
@@ -61,6 +64,7 @@ void setup_one_clock_down()
 
     state.start = false;
     state.game_end = false;
+    state.make_sound = true;
 }
 
 void setup_dice()
@@ -90,6 +94,11 @@ void mode_two_clock_up()
     if (is_button_pressed(buttons.start_stop))
     {
         state.start = !state.start;
+
+        if (state.start)
+        {
+            make_sound(START_BEEP, 1);
+        }
     }
 
     if (state.start && !state.game_end)
@@ -125,7 +134,7 @@ void mode_two_clock_up()
         CHANGE_MODE(mode_menu)
     }
 
-    if(!state.start)  ///PAUSE
+    if (!state.start)  ///PAUSE
     {
         lcd.setCursor(5, 0);
         lcd.print('P');
@@ -135,22 +144,7 @@ void mode_two_clock_up()
         lcd.setCursor(5, 0);
         lcd.print(' ');
     }
-    
-    if(state.game_end)   ///TIME END
-    {
-        ///ADD MORE STUFF (like buzzer)
-    }
-    
-    ///selective clearing of screen to avoid flicker
-//    lcd.setCursor(1, 0);
-//    lcd.print("  ");
-//    lcd.setCursor(4, 0);
-//    lcd.print("   ");
-//    lcd.setCursor(9, 0);
-//    lcd.print("  ");
-//    lcd.setCursor(13, 0);
-//    lcd.print("  ");
-    
+
     // Left player indicator
     lcd.setCursor(0, 0);
     lcd.write((byte) EMPTY_RECTANGLE);
@@ -181,11 +175,11 @@ void mode_two_clock_up()
     }
     else
     {
-    lcd.setCursor(3, 0);
-    lcd.print(' ');
-
-    lcd.setCursor(12, 0);
-    lcd.write((byte) TURN_INDICATOR);
+        lcd.setCursor(3, 0);
+        lcd.print(' ');
+    
+        lcd.setCursor(12, 0);
+        lcd.write((byte) TURN_INDICATOR);
     }
 
     // Player times
@@ -199,6 +193,16 @@ void mode_two_clock_up()
         display_time(state.left_player_time, Player::Left, false);
         display_time(state.right_player_time, Player::Right, false);
     }
+
+    if (state.game_end)   ///TIME END
+    {
+        if (state.make_sound)
+        {
+            make_sound(END_MELODY, 4);   
+        }
+
+        state.make_sound = false;
+    }
 }
 
 void mode_two_clock_down()
@@ -206,6 +210,11 @@ void mode_two_clock_down()
     if (is_button_pressed(buttons.start_stop))
     {
         state.start = !state.start;
+
+        if (state.start)
+        {
+            make_sound(START_BEEP, 1);
+        }
     }
 
     if (state.start && !state.game_end)
@@ -240,7 +249,7 @@ void mode_two_clock_down()
         CHANGE_MODE(mode_menu)
     }
 
-    if(!state.start)  ///PAUSE
+    if (!state.start)  ///PAUSE
     {
         lcd.setCursor(5, 0);
         lcd.print('P');
@@ -249,11 +258,6 @@ void mode_two_clock_down()
     {
         lcd.setCursor(5, 0);
         lcd.print(' ');
-    }
-    
-    if(state.game_end)   ///TIME END
-    {
-        ///ADD MORE STUFF (like buzzer)
     }
 
     // Left player indicator
@@ -303,23 +307,35 @@ void mode_two_clock_down()
         display_time(state.left_player_time, Player::Left, false);
         display_time(state.right_player_time, Player::Right, false);
     }
+
+    if (state.game_end)   ///TIME END
+    {
+        if (state.make_sound)
+        {
+            make_sound(END_MELODY, 4);   
+        }
+
+        state.make_sound = false;
+    }
 }
 
-void mode_one_clock_up()
+void mode_one_clock_up()  // TODO softer reset
 {
-    if (is_button_pressed(buttons.start_stop) ||
-        is_button_pressed(buttons.left_player) ||
-        is_button_pressed(buttons.right_player))
+    if (is_button_pressed(buttons.start_stop))
     {
         state.start = !state.start;
+
+        if (state.start)
+        {
+            make_sound(START_BEEP, 1);
+        }
     }
     else if (is_button_pressed(buttons.ok))
     {
-        state.start = false;
-        state.game_end = false;
-        state.right_player_time = 0;
+        setup_one_clock_up();
         lcd.setCursor(0, 0);
         lcd.print("                ");
+        make_sound(GENTLE_RESET_BEEP, 1);
     }
 
     if (state.start && !state.game_end)
@@ -352,12 +368,7 @@ void mode_one_clock_up()
         lcd.setCursor(2, 1);
         lcd.print(" ");
     }
-    
-    if (state.game_end)   ///TIME END
-    {
-        ///ADD MORE STUFF (like buzzer)
-    }
-    
+
     if (state.show_deciseconds)
     {
         display_time_one(state.right_player_time, true);
@@ -367,28 +378,36 @@ void mode_one_clock_up()
         display_time_one(state.right_player_time, false);
     }
 
-    ///clear 
-    lcd.setCursor(2, 0);
-    lcd.print(" ");
-
     display_progress_bar(state.right_player_time, state.time_limit, Monotony::Ascend);
+
+    if (state.game_end)   ///TIME END
+    {
+        if (state.make_sound)
+        {
+            make_sound(END_MELODY, 4);   
+        }
+
+        state.make_sound = false;
+    }
 }
 
-void mode_one_clock_down()
+void mode_one_clock_down()  // TODO softer reset
 {
-    if (is_button_pressed(buttons.start_stop) ||
-        is_button_pressed(buttons.left_player) ||
-        is_button_pressed(buttons.right_player))
+    if (is_button_pressed(buttons.start_stop))
     {
         state.start = !state.start;
+
+        if (state.start)
+        {
+            make_sound(START_BEEP, 1);
+        }
     }
     else if (is_button_pressed(buttons.ok))
     {
-        state.start = false;
-        state.game_end = false;
-        state.right_player_time = state.time_limit;
+        setup_one_clock_down();
         lcd.setCursor(0, 0);
         lcd.print("                ");
+        make_sound(GENTLE_RESET_BEEP, 1);
     }
 
     if (state.start && !state.game_end)
@@ -421,11 +440,6 @@ void mode_one_clock_down()
         lcd.setCursor(2, 1);
         lcd.print(" ");
     }
-    
-    if (state.game_end)   ///TIME END
-    {
-        ///ADD MORE STUFF (like buzzer)
-    }
 
     if (state.show_deciseconds)
     {
@@ -436,11 +450,17 @@ void mode_one_clock_down()
         display_time_one(state.right_player_time, false);
     }
 
-    ///clear
-    lcd.setCursor(2, 0);
-    lcd.print(" ");
-
     display_progress_bar(state.right_player_time, state.time_limit, Monotony::Descend);
+
+    if (state.game_end)   ///TIME END
+    {
+        if (state.make_sound)
+        {
+            make_sound(END_MELODY, 4);   
+        }
+
+        state.make_sound = false;
+    }
 }
 
 void mode_dice()
@@ -457,7 +477,21 @@ void mode_dice()
             lcd.clear();
             lcd.setCursor(7, 0);
             lcd.print(ANIMATION[i]);
-            delay(300);
+
+            if (state.dice_number == 2)
+            {
+                lcd.setCursor(7, 1);
+                lcd.print(ANIMATION[i]);
+            }
+
+            delay(150);
+
+            if (i % 2 == 0)
+                make_sound(DICE_NOTE1, 1);
+            else
+                make_sound(DICE_NOTE2, 1);
+
+            delay(150);
         }
     }
 
@@ -571,18 +605,27 @@ void mode_menu()
                 {
                     case GameMode::TwoClockUp:
                         setup_two_clock_up();
+                        make_sound(START_MELODY, 4);
                         CHANGE_MODE(mode_two_clock_up)
+                        
                     case GameMode::TwoClockDown:
                         setup_two_clock_down();
+                        make_sound(START_MELODY, 4);
                         CHANGE_MODE(mode_two_clock_down)
+                        
                     case GameMode::OneClockUp:
                         setup_one_clock_up();
+                        make_sound(START_MELODY, 4);
                         CHANGE_MODE(mode_one_clock_up)
+                        
                     case GameMode::OneClockDown:
                         setup_one_clock_down();
+                        make_sound(START_MELODY, 4);
                         CHANGE_MODE(mode_one_clock_down)
+                        
                     case GameMode::Dice:
                         setup_dice();
+                        make_sound(START_MELODY, 4);
                         CHANGE_MODE(mode_dice)
                 }
         }

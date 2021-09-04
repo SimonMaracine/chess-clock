@@ -12,6 +12,36 @@ const char* ANIMATION[8] = {
     "<", ">", "<", ">", "<", ">", "<", ">"
 };
 
+const Note END_MELODY[4] = {
+    { 1000, 100, 50 },
+    { 800, 100, 50 },
+    { 600, 100, 50 },
+    { 200, 400, 1 }
+};
+
+const Note START_MELODY[4] = {
+    { 200, 100, 50 },
+    { 600, 100, 50 },
+    { 800, 100, 50 },
+    { 1000, 150, 1 }
+};
+
+const Note DICE_NOTE1[1] = {
+    { 300, 25, 1 }
+};
+
+const Note DICE_NOTE2[1] = {
+    { 100, 25, 1 }
+};
+
+const Note START_BEEP[1] = {
+    { 300, 150, 1 }
+};
+
+const Note GENTLE_RESET_BEEP[1] = {
+    { 600, 150, 1 }
+};
+
 void display_time(unsigned long player_time, Player player, bool show_deciseconds)
 {
     const char ASCII_ZERO = '0';
@@ -123,15 +153,19 @@ void display_progress_bar(unsigned long time, unsigned long time_limit, Monotony
     }
 
     lcd.setCursor(0, 0);
-    for (int i = 0; i < NUM_CELLS; i++)
+    for (int i = 0; i < cells_filled; i++)
     {
-        if( i < cells_filled)
-        {
-            lcd.write((byte) FILLED_RECTANGLE);
-        }
-        else
-        {
-            lcd.print(" ");
-        }
+        lcd.write((byte) FILLED_RECTANGLE);
+    }
+}
+
+void make_sound(const Note* melody, int notes_count)
+{
+    for (int i = 0; i < notes_count; i++)
+    {
+        tone(BUZZER, melody[i].tone_value);
+        delay(melody[i].duration);
+        noTone(BUZZER);
+        delay(melody[i].delay_value);
     }
 }

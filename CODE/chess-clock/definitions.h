@@ -8,6 +8,8 @@
 #define D6 6
 #define D7 7
 
+#define BUZZER 9
+
 #define LEFT_PLAYER_BUTTON A0
 #define RIGHT_PLAYER_BUTTON A1
 #define START_STOP_BUTTON A2
@@ -70,6 +72,7 @@ struct GameState
 
     bool start = false;
     bool game_end = false;
+    bool make_sound = true;
 
     bool set_time_in_seconds = false;
     TimeMode last_time_mode = TimeMode::Minutes;
