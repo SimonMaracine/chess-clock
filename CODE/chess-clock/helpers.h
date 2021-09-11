@@ -33,5 +33,6 @@ void change_mode(mode_func mode);
 void display_time_one(unsigned long time, bool show_deciseconds);
 void display_progress_bar(unsigned long time, unsigned long time_limit, Monotony monotony);
 void make_sound(const Note* melody, int notes_count);
+void toggle_light(bool on, int light);
 
 #endif  // HELPERS_H

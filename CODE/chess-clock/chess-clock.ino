@@ -27,6 +27,8 @@ void setup()
     lcd.createChar(DOWN_ARROW, down_arrow);
 
     pinMode(BUZZER, OUTPUT);
+    pinMode(LEFT_LED, OUTPUT);
+    pinMode(RIGHT_LED, OUTPUT);
 
     // Set initial mode to startup
     current_mode = mode_startup;

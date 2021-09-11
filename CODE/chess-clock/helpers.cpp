@@ -169,3 +169,8 @@ void make_sound(const Note* melody, int notes_count)
         delay(melody[i].delay_value);
     }
 }
+
+void toggle_light(bool on, int light)
+{
+    digitalWrite(light, on ? HIGH : LOW);
+}

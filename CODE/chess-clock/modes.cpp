@@ -35,6 +35,8 @@ void setup_two_clock_up()
     state.start = false;
     state.game_end = false;
     state.make_sound = true;
+    toggle_light(true, RIGHT_LED);
+    toggle_light(false, LEFT_LED);
 }
 
 void setup_two_clock_down()
@@ -47,6 +49,8 @@ void setup_two_clock_down()
     state.start = false;
     state.game_end = false;
     state.make_sound = true;
+    toggle_light(true, RIGHT_LED);
+    toggle_light(false, LEFT_LED);
 }
 
 void setup_one_clock_up()
@@ -80,7 +84,19 @@ void mode_startup()
         buttons.start_stop[0] || buttons.soft_reset[0] ||
         buttons.ok[0])
     {
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
         CHANGE_MODE(mode_menu)
+    }
+
+    static unsigned long last_time = 0;
+    if (millis() - last_time > 1000)
+    {
+        static bool on = true;
+        on = !on;
+        toggle_light(on, RIGHT_LED);
+        toggle_light(!on, LEFT_LED);
+        last_time = millis();
     }
 
     lcd.setCursor(0, 0);
@@ -106,10 +122,14 @@ void mode_two_clock_up()
         if (is_button_pressed(buttons.left_player) && state.player == Player::Left)
         {
             state.player = Player::Right;
+            toggle_light(true, RIGHT_LED);
+            toggle_light(false, LEFT_LED);
         }
         else if (is_button_pressed(buttons.right_player) && state.player == Player::Right)
         {
             state.player = Player::Left;
+            toggle_light(true, LEFT_LED);
+            toggle_light(false, RIGHT_LED);
         }
 
         if (millis() - last_time > 100)
@@ -131,6 +151,8 @@ void mode_two_clock_up()
 
     if (is_button_pressed(buttons.soft_reset))
     {
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
         CHANGE_MODE(mode_menu)
     }
 
@@ -202,6 +224,15 @@ void mode_two_clock_up()
         }
 
         state.make_sound = false;
+
+        static unsigned long last_time = 0;
+        if (millis() - last_time > 200)
+        {
+            static bool on = true;
+            on = !on;
+            toggle_light(on, state.player == Player::Right ? RIGHT_LED : LEFT_LED);
+            last_time = millis();
+        }
     }
 }
 
@@ -222,10 +253,14 @@ void mode_two_clock_down()
         if (is_button_pressed(buttons.left_player) && state.player == Player::Left)
         {
             state.player = Player::Right;
+            toggle_light(true, RIGHT_LED);
+            toggle_light(false, LEFT_LED);
         }
         else if (is_button_pressed(buttons.right_player) && state.player == Player::Right)
         {
             state.player = Player::Left;
+            toggle_light(true, LEFT_LED);
+            toggle_light(false, RIGHT_LED);
         }
 
         if (millis() - last_time > 100)
@@ -246,6 +281,8 @@ void mode_two_clock_down()
 
     if (is_button_pressed(buttons.soft_reset))
     {
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
         CHANGE_MODE(mode_menu)
     }
 
@@ -316,6 +353,15 @@ void mode_two_clock_down()
         }
 
         state.make_sound = false;
+
+        static unsigned long last_time = 0;
+        if (millis() - last_time > 200)
+        {
+            static bool on = true;
+            on = !on;
+            toggle_light(on, state.player == Player::Right ? RIGHT_LED : LEFT_LED);
+            last_time = millis();
+        }
     }
 }
 
@@ -336,6 +382,9 @@ void mode_one_clock_up()
         lcd.setCursor(0, 0);
         lcd.print("                ");
         make_sound(GENTLE_RESET_BEEP, 1);
+
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
     }
 
     if (state.start && !state.game_end)
@@ -355,6 +404,8 @@ void mode_one_clock_up()
 
     if (is_button_pressed(buttons.soft_reset))
     {
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
         CHANGE_MODE(mode_menu)
     }
 
@@ -388,6 +439,16 @@ void mode_one_clock_up()
         }
 
         state.make_sound = false;
+
+        static unsigned long last_time = 0;
+        if (millis() - last_time > 200)
+        {
+            static bool on = true;
+            on = !on;
+            toggle_light(on, RIGHT_LED);
+            toggle_light(on, LEFT_LED);
+            last_time = millis();
+        }
     }
 }
 
@@ -408,6 +469,9 @@ void mode_one_clock_down()
         lcd.setCursor(0, 0);
         lcd.print("                ");
         make_sound(GENTLE_RESET_BEEP, 1);
+
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
     }
 
     if (state.start && !state.game_end)
@@ -427,6 +491,8 @@ void mode_one_clock_down()
 
     if (is_button_pressed(buttons.soft_reset))
     {
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
         CHANGE_MODE(mode_menu)
     }
 
@@ -460,6 +526,16 @@ void mode_one_clock_down()
         }
 
         state.make_sound = false;
+
+        static unsigned long last_time = 0;
+        if (millis() - last_time > 200)
+        {
+            static bool on = true;
+            on = !on;
+            toggle_light(on, RIGHT_LED);
+            toggle_light(on, LEFT_LED);
+            last_time = millis();
+        }
     }
 }
 
@@ -484,6 +560,11 @@ void mode_dice()
                 lcd.print(ANIMATION[i]);
             }
 
+            static bool on = false;
+            on = !on;
+            toggle_light(!on, RIGHT_LED);
+            toggle_light(on, LEFT_LED);
+
             delay(150);
 
             if (i % 2 == 0)
@@ -493,6 +574,9 @@ void mode_dice()
 
             delay(150);
         }
+
+        toggle_light(false, RIGHT_LED);
+        toggle_light(false, LEFT_LED);
     }
 
     if (is_button_pressed(buttons.soft_reset))
@@ -561,7 +645,7 @@ void mode_submenu_dice()
 }
 
 void mode_menu()
-{
+{    
     if (is_button_pressed(buttons.left_player))
     {
         lcd.setCursor((int) state.current_menu, 1);
