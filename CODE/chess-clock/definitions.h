@@ -9,6 +9,8 @@
 #define D7 7
 
 #define BUZZER 9
+#define LEFT_LED 11
+#define RIGHT_LED 10
 
 #define LEFT_PLAYER_BUTTON A0
 #define RIGHT_PLAYER_BUTTON A1
@@ -82,6 +84,8 @@ struct GameState
 
     int dice_number;
     int dice[2];
+
+//    bool leds[2] = { false, false };
 
     Menu current_menu = Menu::Mode;
     GameMode game_mode = GameMode::TwoClockUp;
